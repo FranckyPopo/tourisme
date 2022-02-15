@@ -79,16 +79,20 @@ bnt_connection.grid(row=5, column=0, ipady=2, ipadx=10, pady=5, sticky="we")
 
 # frame ajoute produit
 frame_product = tkinter.Frame(window, bg="white")
-frame_search = tkinter.Frame(frame_product, width=270, bg="grey")
-frame_search.grid(row=1, column=0, sticky="we", ipady=15)
+frame_search = tkinter.Frame(frame_product, width=270, bg="#E5E5E5")
+frame_search.grid(row=1, column=0, sticky="we", ipady=10)
 
-label_title = tkinter.Label(frame_product, text="POPO FOOD", fg="white", font=style_add_produt.font_title, bg=style_admin.main_color, width=70,)
+label_title = tkinter.Label(frame_product, text="POPO FOOD", fg="white", font=style_add_produt.font_title, bg=style_admin.main_color, width=70)
 label_title.grid(row=0, column=0, sticky="we", ipady=25)
 
+label_x = tkinter.Label(frame_search, bg="#E5E5E5")
+label_x.grid(row=0, column=0)
+
 enter_search = tkinter.Entry(frame_search)
-enter_search.grid(row=0, column=0, sticky="w", padx=30)
+enter_search.grid(row=1, column=0, sticky="w", padx=30)
 bnt_search = tkinter.Button(frame_search, text="Rechercher")
-bnt_search.grid(row=0, column=1, padx=20, sticky="w", ipady=3, ipadx=2)
+bnt_search.grid(row=1, column=1, sticky="w", ipady=3, ipadx=2)
+
 
 
 label_list_product = tkinter.Label(frame_product, text="Liste des produits en vente")
