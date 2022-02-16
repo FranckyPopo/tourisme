@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import tkinter
+from functools import partial
 from style import style_admin, style_add_produt
 
 
@@ -9,8 +10,24 @@ root_folder = os.getcwd()
 folder_data = os.path.join(root_folder, "data")
 os.makedirs(folder_data, exist_ok=True)
 
-# Basse de données
+# BD
 path_list_products = folder_data + "/" + "list_products.bd"
+
+def modify_product(name_product):
+    d = {
+        "old_name": name_product,
+        "new_name": input("Veuillez entrer le nouveaux nom: "),
+        "new_quantity": int(input("Veuillez entrer la nouvelle quantité: "))
+    }
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    cursor.execute("""UPDATE list_products SET name_product=:new_name,  quantity_product=:new_quantity 
+                   WHERE name_product=:old_name""", d
+    )
+    conn.commit()
+    conn.close()
+    admin_space()
+
 
 def check_admin():
     login = enter_user_admin.get()
@@ -43,6 +60,7 @@ def admin_space():
     data = cursor.execute("SELECT * FROM list_products")
     list_product = data.fetchall()
     conn.commit()
+    conn.close()
 
     i = 1
     for product in list_product:
@@ -55,7 +73,7 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=modify_product)
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(modify_product, name_product))
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)       
         i += 1
 
@@ -71,6 +89,7 @@ def add_product():
         cursor = conn.cursor()
         cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product)", product)
         conn.commit()
+        conn.close()
         admin_space()
     else:
         print('Veuillez entrer remplir tout les champs')
