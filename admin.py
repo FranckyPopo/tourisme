@@ -18,8 +18,7 @@ def window_modify_product(name_product):
     
     
     def modify_product():
-        new_name = enter_new_name_product.get()
-        
+        new_name = enter_new_name_product.get().strip()
         try:
             new_quantity = int(enter_new_quantity_product.get())
         except ValueError:
@@ -135,9 +134,9 @@ def window_add_product():
     
     
     def add_product():
+        name_product = enter_name_product.get().strip()
         try:
             quantity_product = int(enter_quantity_product.get())
-            name_product = enter_name_product.get()
         except ValueError:
             label_error_add_product.config(fg="#FF0505")
         else:
@@ -160,7 +159,6 @@ def window_add_product():
                 conn.commit()
                 conn.close()
                 label_error_add_product.config(fg=style_admin.main_color)
-                label_error_add_product_2.config(fg=style_admin.main_color)
                 enter_name_product.delete(0, "end")
                 enter_quantity_product.delete(0, "end")
                 messagebox.showinfo("Ajout produit", "Félicitation le produit a été ajouté avec succès")
