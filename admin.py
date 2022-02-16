@@ -14,20 +14,55 @@ os.makedirs(folder_data, exist_ok=True)
 # BD
 path_list_products = folder_data + "/" + "list_products.bd"
 
-def modify_product(name_product):
-    d = {
-        "old_name": name_product,
-        "new_name": input("Veuillez entrer le nouveaux nom: "),
-        "new_quantity": int(input("Veuillez entrer la nouvelle quantité: "))
-    }
-    conn = sqlite3.connect(path_list_products)
-    cursor = conn.cursor()
-    cursor.execute("""UPDATE list_products SET name_product=:new_name,  quantity_product=:new_quantity 
-                   WHERE name_product=:old_name""", d
-    )
-    conn.commit()
-    conn.close()
-    admin_space()
+def window_modify_product(name_product):
+    
+    
+    def modify_product():
+        new_name = enter_new_name_product.get()
+        
+        try:
+            new_quantity = int(enter_new_quantity_product.get())
+        except ValueError:
+            label_error_safeguard_product.config(fg="#FF0505")
+        else:
+            d = {
+                "old_name": name_product,
+                "new_name": new_name,
+                "new_quantity": new_quantity
+            }
+            conn = sqlite3.connect(path_list_products)
+            cursor = conn.cursor()
+            cursor.execute("""UPDATE list_products SET name_product=:new_name,  quantity_product=:new_quantity 
+                        WHERE name_product=:old_name""", d
+            )
+            conn.commit()
+            conn.close()
+            admin_space()
+    
+    
+    root = tkinter.Toplevel()
+    root.geometry("480x320")
+    root.resizable(False, False)
+    root.title("Ajout produit")
+    root.config(bg=style_admin.main_color)
+    frame_modify_product = tkinter.Frame(root,  bg=style_admin.main_color)
+    frame_modify_product.pack(expand="yes")
+    
+    label_new_name_product = tkinter.Label(frame_modify_product, text="Nouveau nom du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_new_name_product.grid(row=0, column=0, sticky="w")
+    enter_new_name_product = tkinter.Entry(frame_modify_product)
+    enter_new_name_product.grid(row=1, column=0, sticky="we", pady=5)
+    
+    label_new_quantity_product = tkinter.Label(frame_modify_product, text="Nouvelle quantité du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_new_quantity_product.grid(row=2, column=0, sticky="w")
+    enter_new_quantity_product = tkinter.Entry(frame_modify_product)
+    enter_new_quantity_product.grid(row=3, column=0, sticky="we", pady=5)
+    
+    label_error_safeguard_product = tkinter.Label(frame_modify_product, text="Un erreur est survenue lors de la sauvegarde du produit", bg=style_admin.main_color, fg=style_admin.main_color, font=("Roboto", 12, "bold"))
+    label_error_safeguard_product.grid(row=4, column=0, pady=5)
+
+    bnt_safeguard_product = tkinter.Button(frame_modify_product, text="Sauvegarder les modifications", command=modify_product)
+    bnt_safeguard_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
 def delete_product(name_product, *labels_delete):
@@ -86,7 +121,7 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(modify_product, name_product), relief="flat")
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)  
         
         bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
@@ -153,7 +188,7 @@ def window_add_product():
     label_error_add_product = tkinter.Label(frame_add_product, text="Un erreur est survenur lors de l'ajout du produit", bg=style_admin.main_color, fg=style_admin.main_color, font=("Roboto", 12, "bold"))
     label_error_add_product.grid(row=4, column=0, pady=5)
 
-    bnt_add_product = tkinter.Button(frame_add_product, text="Ajouter un nouveau produit", command=add_product)
+    bnt_add_product = tkinter.Button(frame_add_product, text="Ajouter le produit", command=add_product)
     bnt_add_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
