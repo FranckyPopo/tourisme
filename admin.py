@@ -29,6 +29,18 @@ def modify_product(name_product):
     admin_space()
 
 
+def delete_product(name_product, *labels_delete):
+    for label in labels_delete:
+        label.grid_forget()
+    
+    d = {"product_delete": name_product}
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM list_products WHERE name_product=:product_delete", d)
+    conn.commit()
+    conn.close()
+    
+
 def check_admin():
     login = enter_user_admin.get()
     password = enter_password_admin.get()
@@ -74,7 +86,12 @@ def admin_space():
         label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
 
         bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(modify_product, name_product))
-        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)       
+        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)  
+        
+        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer")
+        
+        bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
+        bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2)    
         i += 1
 
 
