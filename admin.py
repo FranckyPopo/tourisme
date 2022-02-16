@@ -53,7 +53,10 @@ def admin_space():
         label_product.grid(row=i, column=0, sticky="w", padx=30)
         
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
-        label_quantity.grid(row=i, column=1, sticky="w", padx=120)        
+        label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
+
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=modify_product)
+        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)       
         i += 1
 
 
