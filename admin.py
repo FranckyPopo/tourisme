@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import tkinter
+from tkinter import messagebox
 from functools import partial
 from style import style_admin, style_add_produt
 
@@ -85,37 +86,82 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(modify_product, name_product))
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)  
         
-        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer")
+        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
         
         bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
         bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2)    
         i += 1
 
 
+def window_add_product():
     
-def add_product():
-    name_product = input("Veuillez entrer le nom du produit: ")
-    quantity_product = input("Veuillez entrer la quantité du produit")
-    product = {"name_product": name_product, "quantity_product": quantity_product}
     
-    if name_product and quantity_product.isdigit():
-        conn = sqlite3.connect(path_list_products)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product)", product)
-        conn.commit()
-        conn.close()
-        admin_space()
-    else:
-        print('Veuillez entrer remplir tout les champs')
+    def add_product():
+        try:
+            quantity_product = int(enter_quantity_product.get())
+            name_product = enter_name_product.get()
+        except ValueError:
+            label_error_add_product.config(fg="#FF0505")
+        else:
+            conn = sqlite3.connect(path_list_products)
+            cursor = conn.cursor()
+            data = cursor.execute("SELECT * FROM list_products")
+            list_products = data.fetchall()
+            conn.commit()
+            conn.close()
+            
+            for produit in list_products:
+                if produit[0] == name_product:
+                    label_error_add_product.config(fg="#FF0505")
+                    break
+            else:
+                product = {"name_product": name_product, "quantity_product": quantity_product}
+                conn = sqlite3.connect(path_list_products)
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product)", product)
+                conn.commit()
+                conn.close()
+                label_error_add_product.config(fg=style_admin.main_color)
+                label_error_add_product_2.config(fg=style_admin.main_color)
+                enter_name_product.delete(0, "end")
+                enter_quantity_product.delete(0, "end")
+                messagebox.showinfo("Ajout produit", "Félicitation le produit a été ajouté avec succès")
+                admin_space()
+        
+
+    root = tkinter.Toplevel()
+    root.geometry("480x320")
+    root.resizable(False, False)
+    root.title("Ajout produit")
+    root.config(bg=style_admin.main_color)
+    frame_add_product = tkinter.Frame(root,  bg=style_admin.main_color)
+    frame_add_product.pack(expand="yes")
     
+    label_name_product = tkinter.Label(frame_add_product, text="Nom du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_name_product.grid(row=0, column=0, sticky="w")
+    enter_name_product = tkinter.Entry(frame_add_product)
+    enter_name_product.grid(row=1, column=0, sticky="we", pady=5)
+    
+    label_quantity_product = tkinter.Label(frame_add_product, text="Quantité du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_quantity_product.grid(row=2, column=0, sticky="w")
+    enter_quantity_product = tkinter.Entry(frame_add_product)
+    enter_quantity_product.grid(row=3, column=0, sticky="we", pady=5)
+    
+    label_error_add_product = tkinter.Label(frame_add_product, text="Un erreur est survenur lors de l'ajout du produit", bg=style_admin.main_color, fg=style_admin.main_color, font=("Roboto", 12, "bold"))
+    label_error_add_product.grid(row=4, column=0, pady=5)
+
+    bnt_add_product = tkinter.Button(frame_add_product, text="Ajouter un nouveau produit", command=add_product)
+    bnt_add_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
+
 
 window = tkinter.Tk()
 window.geometry("1126x720")
 #window.resizable(False, False)
-window["bg"] = style_admin.main_color
+window.config(bg=style_admin.main_color)
+window.title("POPO FOOD")
 
 # frame principale
 frame_main = tkinter.Frame(window, bg=style_admin.main_color)
@@ -159,7 +205,7 @@ bnt_search.grid(row=1, column=1, sticky="w", ipady=3, ipadx=2)
 label_list_product = tkinter.Label(frame_admin_space, text="Liste des produits en vente", bg="#FFFFFF", font=("Roboto", 30, "bold"))
 label_list_product.grid(row=2, column=0, sticky="w", pady=30, padx=30)
 
-bnt_add_product = tkinter.Button(frame_admin_space, text="Ajouter un nouveau produit", bg="#FFFFFF", command=add_product)
+bnt_add_product = tkinter.Button(frame_admin_space, text="Ajouter un nouveau produit", bg="#FFFFFF", command=window_add_product)
 bnt_add_product.grid(row=2, column=0, sticky="e", pady=30, ipady=3, ipadx=2, padx=30)
 
 window.mainloop()
