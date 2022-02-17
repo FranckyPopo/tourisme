@@ -109,6 +109,9 @@ def admin_space():
     conn.commit()
     conn.close()
 
+    for widget in frame_list_product.winfo_children():
+        widget.grid_forget()
+    
     i = 1
     for product in list_product:
         name_product = product[0]
@@ -190,7 +193,7 @@ def window_add_product():
     bnt_add_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
-def search_product():
+def search_product(event):
     x = list()
     product_search = enter_search.get()
     
@@ -273,8 +276,9 @@ label_x = tkinter.Label(frame_search, bg="#E5E5E5")
 label_x.grid(row=0, column=0)
 
 enter_search = tkinter.Entry(frame_search)
+enter_search.bind("<Key>", search_product)
 enter_search.grid(row=1, column=0, sticky="w", padx=30)
-bnt_search = tkinter.Button(frame_search, text="Rechercher", command=search_product)
+bnt_search = tkinter.Button(frame_search, text="Rechercher")
 bnt_search.grid(row=1, column=1, sticky="w", ipady=3, ipadx=2)
 
 label_list_product = tkinter.Label(frame_admin_space, text="Liste des produits en vente", bg="#FFFFFF", font=("Roboto", 30, "bold"))
