@@ -90,13 +90,13 @@ def check_admin():
 def admin_space():
     frame_main.place_forget()
     frame_admin_space.place(x=0, y=0)
-    frame_list_product.grid(row=3, column=0, sticky="w")
+    frame_list_product.grid(row=4, column=0, sticky="w")
     
-    label_title_name_product = tkinter.Label(frame_list_product, text="Nom produit", font=("Roboto", 24), bg="white")
-    label_title_name_product.grid(row=0, column=0, padx=30)
+    label_title_name_product = tkinter.Label(frame_admin_space, text="Nom produit", font=("Roboto", 24), bg="white")
+    label_title_name_product.grid(row=3, column=0, padx=30, sticky="w")
     
-    label_title_quantity_product = tkinter.Label(frame_list_product, text="Quantité en stock", font=("Roboto", 24), bg="white")
-    label_title_quantity_product.grid(row=0, column=1, padx=120)
+    label_title_quantity_product = tkinter.Label(frame_admin_space, text="Quantité en stock", font=("Roboto", 24), bg="white")
+    label_title_quantity_product.grid(row=3, column=0, padx=255, sticky="w")
     
     # On affiche la liste de tout les produits
     conn = sqlite3.connect(path_list_products)
@@ -115,18 +115,18 @@ def admin_space():
         quantity_product = product[1]
         
         label_product = tkinter.Label(frame_list_product, text=name_product, font=("Roboto", 18), bg="white")
-        label_product.grid(row=i, column=0, sticky="w", padx=30)
+        label_product.grid(row=i, column=0, sticky="w", padx=30, pady=5)
         
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
-        label_quantity.grid(row=i, column=1, sticky="w", padx=120) 
+        label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
         bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(window_modify_product, name_product), relief="flat")
-        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2)  
+        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
         bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
         
         bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
-        bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2)    
+        bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
         i += 1
 
 
@@ -190,6 +190,16 @@ def window_add_product():
     bnt_add_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
+def search_product():
+    chaine = enter_search.get()
+    
+    for windget in frame_list_product.winfo_children():
+        print(windget)
+        windget.grid_forget()
+    
+    
+
+
 window = tkinter.Tk()
 window.geometry("1126x720")
 #window.resizable(False, False)
@@ -232,7 +242,7 @@ label_x.grid(row=0, column=0)
 
 enter_search = tkinter.Entry(frame_search)
 enter_search.grid(row=1, column=0, sticky="w", padx=30)
-bnt_search = tkinter.Button(frame_search, text="Rechercher")
+bnt_search = tkinter.Button(frame_search, text="Rechercher", command=search_product)
 bnt_search.grid(row=1, column=1, sticky="w", ipady=3, ipadx=2)
 
 label_list_product = tkinter.Label(frame_admin_space, text="Liste des produits en vente", bg="#FFFFFF", font=("Roboto", 30, "bold"))
