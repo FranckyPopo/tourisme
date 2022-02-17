@@ -191,14 +191,46 @@ def window_add_product():
 
 
 def search_product():
-    chaine = enter_search.get()
+    x = list()
+    product_search = enter_search.get()
     
     for windget in frame_list_product.winfo_children():
-        print(windget)
         windget.grid_forget()
     
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    data = cursor.execute("SELECT * FROM list_products")
+    list_product = data.fetchall()
+    conn.commit()
+    conn.close()
     
+    for product in list_product:
+        name_product = product[0]
+        if product_search in name_product:
+            x.append(product)
+    
+    i = 0
+    for product in x:
+        name_product = product[0]
+        quantity_product = product[1]
+        
+        label_product = tkinter.Label(frame_list_product, text=name_product, font=("Roboto", 18), bg="white")
+        label_product.grid(row=i, column=0, sticky="w", padx=30, pady=5)
+        
+        label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
+        label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(window_modify_product, name_product), relief="flat")
+        bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
+        
+        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
+        
+        bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
+        bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
+        i += 1
+    
+    
+    
 
 window = tkinter.Tk()
 window.geometry("1126x720")
