@@ -3,6 +3,7 @@ import sqlite3
 import tkinter
 from tkinter import messagebox
 from functools import partial
+from PIL import Image, ImageTk
 from style import style_admin, style_add_produt
 
 
@@ -123,10 +124,10 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(window_modify_product, name_product), relief="flat")
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", image=img_modify, highlightbackground="white", command=partial(window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
-        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
+        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat", image=img_delete, bd=10, bg="white", highlightbackground="white")
         
         bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
         bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
@@ -134,7 +135,7 @@ def admin_space():
 
 
 def window_add_product():
-    
+
     
     def add_product():
         name_product = enter_name_product.get().strip()
@@ -240,6 +241,13 @@ window.geometry("1126x720")
 #window.resizable(False, False)
 window.config(bg=style_admin.main_color)
 window.title("POPO FOOD")
+
+# Icone
+photo_modify = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/modifier-icône.jpg").resize((50, 50))
+img_modify = ImageTk.PhotoImage(photo_modify)
+
+photo_delete = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/supprimer-2.png").resize((40, 40))
+img_delete = ImageTk.PhotoImage(photo_delete)
 
 # frame principale
 frame_main = tkinter.Frame(window, bg=style_admin.main_color)
