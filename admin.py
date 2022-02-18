@@ -233,12 +233,10 @@ def search_product(event):
         bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
         i += 1
     
-    
-    
 
 window = tkinter.Tk()
 window.geometry("1126x720")
-#window.resizable(False, False)
+window.resizable(False, False)
 window.config(bg=style_admin.main_color)
 window.title("POPO FOOD")
 
