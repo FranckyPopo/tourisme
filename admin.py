@@ -124,7 +124,7 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", image=img_modify, highlightbackground="white", command=partial(window_modify_product, name_product), relief="flat")
+        bnt_modify = tkinter.Button(frame_list_product, image=img_modify, highlightbackground="white", compound="c", command=partial(window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
         bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat", image=img_delete, bd=10, bg="white", highlightbackground="white")
@@ -243,10 +243,10 @@ window.config(bg=style_admin.main_color)
 window.title("POPO FOOD")
 
 # Icone
-photo_modify = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/modifier-icône.jpg").resize((50, 50))
+photo_modify = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/modifier-icône.jpg").resize((50,50))
 img_modify = ImageTk.PhotoImage(photo_modify)
 
-photo_delete = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/supprimer-2.png").resize((40, 40))
+photo_delete = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/supprimer-2.png").resize((50,50))
 img_delete = ImageTk.PhotoImage(photo_delete)
 
 # frame principale
