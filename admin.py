@@ -2,6 +2,7 @@ import os
 import sqlite3
 import tkinter
 from tkinter import messagebox
+from PIL import Image, ImageTk  
 from functools import partial
 from style import style_admin, style_add_produt
 
@@ -113,6 +114,7 @@ def admin_space():
         widget.grid_forget()
     
     i = 1
+    
     for product in list_product:
         name_product = product[0]
         quantity_product = product[1]
@@ -241,6 +243,8 @@ window.geometry("1126x720")
 window.config(bg=style_admin.main_color)
 window.title("POPO FOOD")
 
+img = Image.open(r"C:\Users\HP\Documents\Projet_Nan\Tourisme\img\image.JPG").resize((50, 50))
+photo = ImageTk.PhotoImage(img)
 # frame principale
 frame_main = tkinter.Frame(window, bg=style_admin.main_color)
 frame_main.place(x=200, y=200)
