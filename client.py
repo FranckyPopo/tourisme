@@ -12,13 +12,28 @@ os.makedirs(folder_data, exist_ok=True)
 path_list_client = folder_data + "/" + "list_client.bd"
 path_list_products = folder_data + "/" + "list_products.bd"
 
+i = 2
+
+def display_menu():
+    frame_container_connection.place_forget()
+    frame_container_recording.place_forget()
+    frame_main.place(x=0, y=0)
+
 
 def display_recording():
     frame_choice.place_forget()
     frame_container_recording.place(x=0, y=0, width=1100)
     window.config(bg="#F7F7F7")
 
-
+       
+def display_connection():
+    frame_choice.place_forget()
+    frame_container_connection.place(x=0, y=0, width=1100)
+    window.config(bg="#F7F7F7")
+    enter_user_name.insert(0, "afri_123")
+    enter_password_connection.insert(0, "pass")
+    
+    
 def check_recording():
     last_name = enter_last_name.get()
     first_name = enter_first_name.get()
@@ -52,11 +67,9 @@ def check_recording():
             number_phone_client = client[4]
             
             if (password_one != password_two) or (user_name == user_name_client) or (number_phone == number_phone_client) or not last_name or email == email_client or not first_name or not genre:  
-                print("non")
                 label_error_recording.config(fg="red")
                 break
         else:
-            print("oui")
             data_recording = {
                 "last_name": last_name,
                 "first_name": first_name,
@@ -72,23 +85,13 @@ def check_recording():
                             :number_phone, :genre, :password)""", data_recording)
             conn.commit()
             conn.close()
-       
-       
-def cancel_recording():
-    frame_container_recording.place_forget()
-    frame_choice.place(x=200, y=150)    
-    window.config(bg=style_admin.main_color)   
-       
-       
-def display_connection():
-    frame_choice.place_forget()
-    frame_container_connection.place(x=0, y=0, width=1100)
-    window.config(bg="#F7F7F7")
+            display_menu()
     
     
 def check_connection():
     user_name = enter_user_name.get()
     password = enter_password_connection.get()
+    
     
     if user_name and password:
         conn = sqlite3.connect(path_list_client)
@@ -101,7 +104,7 @@ def check_connection():
             user_name_client = client[2]
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
-                print("le compte existe !!!!")
+                display_menu()
                 break
         else:
             label_error_connection.config(fg="red")
@@ -109,13 +112,30 @@ def check_connection():
         label_error_connection.config(fg="red")
 
 
+def cancel_recording():
+    frame_container_recording.place_forget()
+    frame_choice.place(x=200, y=150)    
+    window.config(bg=style_admin.main_color)   
+
+
 def cancel_connection():
     frame_container_connection.place_forget()
     frame_choice.place(x=200, y=150)    
     window.config(bg=style_admin.main_color)   
-    
+   
+   
+def popup(event):
+    global i
+    if i % 2 == 0:
+        frame_pupop.place(x=980, y=35)
+        i += 1
+    else:
+        frame_pupop.place_forget()
+        i += 1
 
-# even
+
+
+# event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
 
@@ -230,5 +250,34 @@ bnt_valided_recording.grid(row=17, column=0, sticky="we", pady=4, ipadx=3, ipady
 
 bnt_cancel_recording = tkinter.Button(frame_recording, text="Retour", font=("Roboto", 12, "bold"), command=cancel_recording)
 bnt_cancel_recording.grid(row=18, column=0, sticky="we", pady=4, ipadx=3, ipady=10)
+
+# frame menu
+frame_main = tkinter.Frame(window, )
+
+frame_nav_menu = tkinter.Frame(frame_main, bg=style_admin.main_color, height=80)
+frame_nav_menu.pack(side="top", ipadx=570)
+
+label_logo = tkinter.Label(frame_nav_menu, text='POPO FOOD', fg="black", bg=style_admin.main_color, font=style_add_produt.font_title)
+label_logo.place(x=40, y=15)
+
+enter_search = tkinter.Entry(frame_nav_menu)
+enter_search.place(x=500, y=25)
+
+label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
+label_search.place(x=620, y=20)
+
+label_name = tkinter.Label(frame_nav_menu, text="XXXXX", fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
+label_name.bind("<Button-1>", popup)
+label_name.place(x=980, y=12)
+
+# popup
+frame_pupop = tkinter.Frame(frame_nav_menu, bg=style_admin.main_color)
+
+label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg=style_admin.main_color)
+label_count.grid(row=0, column=0, sticky="w")
+
+label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg=style_admin.main_color)
+label_connection.grid(row=1, column=0, sticky="w")
+
 
 window.mainloop()
