@@ -10,11 +10,16 @@ from style import style_admin, style_add_produt
 
 account = {"user": "nan", "password": "nan"}
 root_folder = os.getcwd()
+folder_img = os.path.join(root_folder, "img")
 folder_data = os.path.join(root_folder, "data")
 os.makedirs(folder_data, exist_ok=True)
 
 # BD
 path_list_products = folder_data + "/" + "list_products.bd"
+
+# Img
+img_delete = folder_img + "/" + "supprimer-2.png"
+img_modify = folder_img + "/" + "modifier-icône.jpg"
 
 def window_modify_product(name_product):
     
@@ -105,7 +110,8 @@ def admin_space():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
                     name_product text,
-                    quantity_product int)""")
+                    quantity_product int,
+                    price_product int)""")
     data = cursor.execute("SELECT * FROM list_products")
     list_product = data.fetchall()
     conn.commit()
@@ -126,7 +132,7 @@ def admin_space():
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
-        bnt_modify = tkinter.Button(frame_list_product, image=img_modify, highlightbackground="white", compound="c", command=partial(window_modify_product, name_product), relief="flat")
+        bnt_modify = tkinter.Button(frame_list_product, image=img_modify, highlightbackground="white", command=partial(window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
         bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat", image=img_delete, bd=10, bg="white", highlightbackground="white")
@@ -143,6 +149,7 @@ def window_add_product():
         name_product = enter_name_product.get().strip()
         try:
             quantity_product = int(enter_quantity_product.get())
+            price_product = int(enter_price_product.get())
         except ValueError:
             label_error_add_product.config(fg="#FF0505")
         else:
@@ -158,10 +165,10 @@ def window_add_product():
                     label_error_add_product.config(fg="#FF0505")
                     break
             else:
-                product = {"name_product": name_product, "quantity_product": quantity_product}
+                product = {"name_product": name_product, "quantity_product": quantity_product, "price_product": price_product}
                 conn = sqlite3.connect(path_list_products)
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product)", product)
+                cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product, :price_product)", product)
                 conn.commit()
                 conn.close()
                 label_error_add_product.config(fg=style_admin.main_color)
@@ -189,11 +196,16 @@ def window_add_product():
     enter_quantity_product = tkinter.Entry(frame_add_product)
     enter_quantity_product.grid(row=3, column=0, sticky="we", pady=5)
     
+    label_price_product = tkinter.Label(frame_add_product, text="Prix", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_price_product.grid(row=4, column=0, sticky="w")
+    enter_price_product = tkinter.Entry(frame_add_product)
+    enter_price_product.grid(row=5, column=0, sticky="we", pady=5)
+    
     label_error_add_product = tkinter.Label(frame_add_product, text="Un erreur est survenur lors de l'ajout du produit", bg=style_admin.main_color, fg=style_admin.main_color, font=("Roboto", 12, "bold"))
-    label_error_add_product.grid(row=4, column=0, pady=5)
+    label_error_add_product.grid(row=6, column=0, pady=5)
 
     bnt_add_product = tkinter.Button(frame_add_product, text="Ajouter le produit", command=add_product)
-    bnt_add_product.grid(row=5, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
+    bnt_add_product.grid(row=7, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
 def search_product(event):
@@ -238,15 +250,15 @@ def search_product(event):
 
 window = tkinter.Tk()
 window.geometry("1126x720")
-window.resizable(False, False)
+#window.resizable(False, False)
 window.config(bg=style_admin.main_color)
 window.title("POPO FOOD")
 
 # Icone
-photo_modify = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/modifier-icône.jpg").resize((50,50))
+photo_modify = Image.open(img_modify).resize((50,50))
 img_modify = ImageTk.PhotoImage(photo_modify)
 
-photo_delete = Image.open("/Users/imac-20/Documents/projetNAN/tourisme/img/supprimer-2.png").resize((50,50))
+photo_delete = Image.open(img_delete).resize((50,50))
 img_delete = ImageTk.PhotoImage(photo_delete)
 
 # frame principale

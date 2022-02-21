@@ -171,15 +171,47 @@ def list_product_favoris():
         else:
             i += 1
     
-    for item in list_product:
-        pass 
 
-            
+def list_product():
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    list_product = cursor.execute("SELECT * FROM list_products").fetchall()
+    conn.commit()
+    conn.close()
+    
+    i = 0
+    r = 2
+    for item in list_product:
+        frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
+        frame.grid(row=r, column=i % 2, pady=20, padx=5) 
+
+        name_product = item[0]
+        price_product = item[2]
+        
+        label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+        label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+
+        price = f"Prix: {price_product} FCFA"
+        label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
+        label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+        
+        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7")
+        bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
+        
+        
+        if i % 2 != 0:
+            r += 1 
+        i += 1
 
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
-    
+ 
+ 
+def refresh(event):
+    list_product_favoris()
+    list_product()
+    print("oui")
     
 
 window = tkinter.Tk()   
@@ -299,12 +331,13 @@ bnt_cancel_recording = tkinter.Button(frame_recording, text="Retour", font=("Rob
 bnt_cancel_recording.grid(row=18, column=0, sticky="we", pady=4, ipadx=3, ipady=10)
 
 # frame menu
-frame_main = tkinter.Frame(window, bg="#F7F7F7")
+frame_main = tkinter.Frame(window, bg="#F7F7F7", bd=2, relief="solid")
 
 frame_nav_menu = tkinter.Frame(frame_main, bg=style_admin.main_color, height=80)
 frame_nav_menu.grid(row=0, column=0, ipadx=570)
 
 label_logo = tkinter.Label(frame_nav_menu, text='POPO FOOD', fg="black", bg=style_admin.main_color, font=style_add_produt.font_title)
+label_logo.bind("<Button-1>", refresh)
 label_logo.place(x=40, y=15)
 
 enter_search = tkinter.Entry(frame_nav_menu)
@@ -328,21 +361,25 @@ label_connection.grid(row=1, column=0, sticky="w")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
-frame_product_favoris.grid(row=2, column=0)
+frame_product_favoris.grid(row=2, column=0, sticky="w")
 
 label_top = tkinter.Label(frame_product_favoris, text="Top des ventes", bg="#F7F7F7", font=("Roboto", 14))
 label_top.grid(row=0, column=0, pady=30, sticky="w", padx=20)
 
 # frame product
-frame_product = tkinter.Frame(frame_main, bg="#F7F7F7", height=200, width=200, background='yellow')
-frame_product.grid(row=3, column=0)
+frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
+frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
+
+label_menu = tkinter.Label(frame_product, text="Menu", font=("Roboto", 14))
+label_menu.grid(row=0, column=0, sticky="w")
 
 frame_price = tkinter.Frame(frame_main, bg="#F7F7F7")
-frame_price.grid(row=2, column=0)
+frame_price.grid(row=2, column=0, sticky="e")
 
 label_achet = tkinter.Label(frame_price, text="Top des ventes", font=("Roboto", 14), bg="#F7F7F7")
 label_achet.grid(row=0, column=0)
 
 list_product_favoris()
+list_product()
 
 window.mainloop()
