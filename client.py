@@ -3,10 +3,12 @@ from tkinter import ttk
 import os
 import random
 import sqlite3
+from PIL import Image, ImageTk
 from style import style_admin, style_add_produt, style_client
 
 root_folder = os.getcwd()
 folder_data = os.path.join(root_folder, "data")
+folder_img = os.path.join(root_folder, "img")
 os.makedirs(folder_data, exist_ok=True)
 
 # BD
@@ -145,11 +147,22 @@ def list_product():
     r = 2
     i = 0
     for item in list_product:
-        frame = tkinter.Frame(frame_product, height=100, width=200, bd=1, relief="solid")
-        frame.grid(row=r, column=i % 2, pady=5, padx=10, sticky="w")
-        name = random.choice(list_product)
-        label = tkinter.Label(frame, text=name)
-        label.grid(row=i, column=i)
+        frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
+        frame.grid(row=r, column=i % 2, padx=2)
+        
+        product = random.choice(list_product)
+        name_product = product[0]
+        price_product = product[2]
+        
+        label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+        label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+
+        price = f"Prix: {price_product}"
+        label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
+        label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+        
+        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7")
+        bnt_cash.grid(row=1, column=1, padx=10)        
                 
         if i % 2 != 0:
             r += 1
@@ -162,6 +175,8 @@ def list_product():
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
+    
+    
 
 window = tkinter.Tk()   
 window.geometry("1147x720")
@@ -169,6 +184,9 @@ window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
+# Img
+img = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
+img_add_product = ImageTk.PhotoImage(img)
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
@@ -305,11 +323,11 @@ label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg=style_ad
 label_connection.grid(row=1, column=0, sticky="w")
 
 # frame produtit
-frame_product = tkinter.Frame(frame_main, bg="#F7F7F7", bd=1, relief="solid")
+frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
 frame_product.pack(side="left")
 
-label_top = tkinter.Label(frame_product, text="Top des ventes", font=("Roboto", 14))
-label_top.grid(row=0, column=0, padx=47, pady=30)
+label_top = tkinter.Label(frame_product, text="Top des ventes", bg="#F7F7F7", font=("Roboto", 14))
+label_top.grid(row=0, column=0, padx=47, pady=30, sticky="w")
 
 frame_price = tkinter.Frame(frame_main, bg="#F7F7F7")
 frame_price.pack(side="right")
