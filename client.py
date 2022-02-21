@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import ttk
 import os
+import random
 import sqlite3
 from style import style_admin, style_add_produt, style_client
 
@@ -134,16 +135,40 @@ def popup(event):
         i += 1
 
 
+def list_product():
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    list_product = cursor.execute("SELECT * FROM list_products").fetchall()
+    conn.commit()
+    conn.close()
+
+    r = 2
+    i = 0
+    for item in list_product:
+        frame = tkinter.Frame(frame_product, height=100, width=200, bd=1, relief="solid")
+        frame.grid(row=r, column=i % 2, pady=5, padx=10, sticky="w")
+        name = random.choice(list_product)
+        label = tkinter.Label(frame, text=name)
+        label.grid(row=i, column=i)
+                
+        if i % 2 != 0:
+            r += 1
+        if i == 1:
+            break
+        else:
+            i += 1
+            
 
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
 
 window = tkinter.Tk()   
-window.geometry("1126x720")
+window.geometry("1147x720")
 window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
+
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
@@ -252,7 +277,7 @@ bnt_cancel_recording = tkinter.Button(frame_recording, text="Retour", font=("Rob
 bnt_cancel_recording.grid(row=18, column=0, sticky="we", pady=4, ipadx=3, ipady=10)
 
 # frame menu
-frame_main = tkinter.Frame(window, )
+frame_main = tkinter.Frame(window, bd=2, relief="solid", bg="#F7F7F7")
 
 frame_nav_menu = tkinter.Frame(frame_main, bg=style_admin.main_color, height=80)
 frame_nav_menu.pack(side="top", ipadx=570)
@@ -278,6 +303,22 @@ label_count.grid(row=0, column=0, sticky="w")
 
 label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg=style_admin.main_color)
 label_connection.grid(row=1, column=0, sticky="w")
+
+# frame produtit
+frame_product = tkinter.Frame(frame_main, bg="#F7F7F7", bd=1, relief="solid")
+frame_product.pack(side="left")
+
+label_top = tkinter.Label(frame_product, text="Top des ventes", font=("Roboto", 14))
+label_top.grid(row=0, column=0, padx=47, pady=30)
+
+frame_price = tkinter.Frame(frame_main, bg="#F7F7F7")
+frame_price.pack(side="right")
+
+label_achet = tkinter.Label(frame_price, text="Top des ventes", font=("Roboto", 14), bg="#F7F7F7")
+label_achet.grid(row=0, column=0)
+
+
+list_product()
 
 
 window.mainloop()
