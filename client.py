@@ -294,6 +294,7 @@ def id_code() -> str:
     return code
 
 def valided_menu():
+    global list_product_buy
     conn = sqlite3.connect(path_list_commande)
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_command (
@@ -335,8 +336,7 @@ def valided_menu():
         conn.commit()
         conn.close()
         
-    for item in list_product_buy:
-        list_product_buy.remove(item)
+    list_product_buy = []
     
     
 # event
