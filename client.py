@@ -222,16 +222,33 @@ def less_product_list_buy(name_product, frame_del):
     for product in list_product_buy:
         if product["name_product"] == name_product:
             if product["quantity_product"] == 1:
-                product["quantity_product"] -= 1   
-                frame_del.grid_forget()
+                list_product_buy.remove(product) 
+                refresh_p()
             else:
-                product["quantity_product"] -= 1   
+                product["quantity_product"] -= 1
+                refresh_p()
+            break
+            
+            
+
+def del_product(event, name_product):
+    print(event)
+    print(name_product)
+    for product in list_product_buy:
+        if product["name_product"] == name_product:
+            list_product_buy.remove(product)
             refresh_p()
             break
    
    
 def refresh_p():    
     i = 1
+    x = 0
+    for frame in frame_price.winfo_children():
+        if x != 0:
+            frame.destroy()
+        x += 1    
+    
     for product in list_product_buy:
         name_product = product["name_product"]
         quantity = product["quantity_product"]
@@ -251,6 +268,7 @@ def refresh_p():
         bnt_delete_product.grid(row=1, column=1, padx=10, sticky="w")
                 
         label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7", fg="red", font=("Arial", 14))
+        label_remove.bind("<Button-1>", partial(del_product, name_product))
         label_remove.grid(row=1, column=3)
         i += 1
         
@@ -263,7 +281,6 @@ def del_error(event):
 def refresh(event):
     list_product_favoris()
     list_product()
-    print("oui")
     
 
 window = tkinter.Tk()   
