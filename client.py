@@ -72,14 +72,18 @@ def check_recording():
         conn.commit()
         conn.close()
         
+        error_exists = False
         for client in list_client:
             email_client = client[3]
             user_name_client = client[2]
             number_phone_client = client[4]
             
-            if (password_one != password_two) or (user_name == user_name_client) or (number_phone == number_phone_client) or not last_name or email == email_client or not first_name or not genre:  
-                label_error_recording.config(fg="red")
+            if (password_one != password_two) or (user_name == user_name_client) or (number_phone == number_phone_client) or last_name.isspace() or not last_name or email == email_client or email.isspace() or first_name.isspace() or not first_name or not genre or password_one.isspace() or password_two.isspace():  
+                error_exists = True
                 break
+        
+        if error_exists:
+            label_error_recording.config(fg="red")
         else:
             data_recording = {
                 "last_name": last_name,
@@ -150,6 +154,9 @@ def popup(event):
 def list_product_favoris():
     conn = sqlite3.connect(path_list_products)
     cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
+                    name_product text, 
+                   quantity int)""")
     list_product = cursor.execute("SELECT * FROM list_products").fetchall()
     conn.commit()
     conn.close()
