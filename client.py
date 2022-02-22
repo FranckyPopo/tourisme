@@ -229,17 +229,6 @@ def less_product_list_buy(name_product, frame_del):
                 refresh_p()
             break
             
-            
-
-def del_product(event, name_product):
-    print(event)
-    print(name_product)
-    for product in list_product_buy:
-        if product["name_product"] == name_product:
-            list_product_buy.remove(product)
-            refresh_p()
-            break
-   
    
 def refresh_p():    
     i = 1
@@ -282,6 +271,14 @@ def refresh(event):
     list_product_favoris()
     list_product()
     
+
+def del_product(event, name_product):
+    for product in list_product_buy:
+        if product["name_product"] == event:
+            list_product_buy.remove(product)
+            refresh_p()
+            break
+       
 
 window = tkinter.Tk()   
 window.geometry("1147x720")
