@@ -223,7 +223,7 @@ def x():
         name_product = product["name_product"]
         quantity = product["quantity_product"]
         frame = tkinter.Frame(frame_price, bg="#F7F7F7", bd=1, relief="solid")
-        frame.grid(row=i, column=0)
+        frame.grid(row=i, column=0, pady=10)
         
         label_title = tkinter.Label(frame, text=name_product, bg="#F7F7F7")
         label_title.grid(row=0, column=0)
@@ -234,11 +234,9 @@ def x():
         bnt_add = tkinter.Button(frame, image=img_add_product)
         bnt_add.grid(row=1, column=0)
         
-        bnt_delete_product = tkinter.Button(image=img_more, highlightbackground="#F7F7F7")
+        bnt_delete_product = tkinter.Button(frame, image=img_less, highlightbackground="#F7F7F7")
         bnt_delete_product.grid(row=1, column=1)
-        
-        bnt_delete_product = tkinter.Button(image=img_less, highlightbackground="#F7F7F7")
-        bnt_delete_product.grid(row=1, column=1)
+
                 
         label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7")
         label_remove.grid(row=1, column=3)
@@ -265,9 +263,10 @@ window.config(bg=style_admin.main_color)
 # Img
 img_main_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
 img_add_product = ImageTk.PhotoImage(img_main_add)
-img_more = ImageTk.PhotoImage(img_main_add.resize((10, 10)))
+img_more = ImageTk.PhotoImage(img_main_add)
 
-img_less = ImageTk.PhotoImage((Image.open(f"{folder_img + '/' + 'icons8-moins-50.png'}").resize((10, 10))))
+img = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((50, 50))
+img_less = ImageTk.PhotoImage(img)
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
