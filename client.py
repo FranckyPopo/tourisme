@@ -21,7 +21,7 @@ i = 2
 def display_menu():
     frame_container_connection.place_forget()
     frame_container_recording.place_forget()
-    frame_price.grid(row=2, column=0, padx=950, pady=160)
+    frame_price.grid(row=2, column=0, padx=900, pady=160)
     frame_main.place(x=0, y=0)
 
 
@@ -223,22 +223,21 @@ def x():
         name_product = product["name_product"]
         quantity = product["quantity_product"]
         frame = tkinter.Frame(frame_price, bg="#F7F7F7", bd=1, relief="solid")
-        frame.grid(row=i, column=0, pady=10)
+        frame.grid(row=i, column=0, pady=15, padx=15, ipadx=5, sticky="we")
         
-        label_title = tkinter.Label(frame, text=name_product, bg="#F7F7F7")
-        label_title.grid(row=0, column=0)
+        label_title = tkinter.Label(frame, text=name_product, bg="#F7F7F7", font=("Arial", 14))
+        label_title.grid(row=0, column=0, columnspan=2, sticky="w")
         
-        label_quantity = tkinter.Label(frame, text=quantity, bg="#F7F7F7")
-        label_quantity.grid(row=0, column=1)
+        label_quantity = tkinter.Label(frame, text=quantity, bg="#F7F7F7", font=("Arial", 14, "bold"))
+        label_quantity.grid(row=0, column=3, sticky="e")
         
-        bnt_add = tkinter.Button(frame, image=img_add_product)
-        bnt_add.grid(row=1, column=0)
+        bnt_add = tkinter.Button(frame, image=img_more, command=partial(add_product_list_buy, name_product))
+        bnt_add.grid(row=1, column=0, sticky="w")
         
         bnt_delete_product = tkinter.Button(frame, image=img_less, highlightbackground="#F7F7F7")
-        bnt_delete_product.grid(row=1, column=1)
-
+        bnt_delete_product.grid(row=1, column=1, padx=10, sticky="w")
                 
-        label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7")
+        label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7", fg="red", font=("Arial", 14))
         label_remove.grid(row=1, column=3)
         i += 1
         
@@ -261,12 +260,14 @@ window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
 # Img
-img_main_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
-img_add_product = ImageTk.PhotoImage(img_main_add)
-img_more = ImageTk.PhotoImage(img_main_add)
+img_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
+img_add_product = ImageTk.PhotoImage(img_add)
 
-img = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((50, 50))
-img_less = ImageTk.PhotoImage(img)
+img_add_two = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((25, 25))
+img_more = ImageTk.PhotoImage(img_add_two)
+
+img_del = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((25, 25))
+img_less = ImageTk.PhotoImage(img_del)
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
@@ -416,7 +417,6 @@ frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
 
 label_menu = tkinter.Label(frame_product, text="Menu", font=("Roboto", 14))
 label_menu.grid(row=0, column=0, sticky="w")
-
 
 # frame panier
 list_product_buy = []
