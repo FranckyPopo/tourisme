@@ -301,6 +301,7 @@ def id_code() -> str:
             id_code()
     return code
 
+
 def valided_menu():
     global list_product_buy
     conn = sqlite3.connect(path_list_commande)
@@ -363,7 +364,62 @@ def del_product(event, name_product):
             list_product_buy.remove(product)
             refresh_p()
             break
-       
+
+        
+def search_product(event):
+    x = list()
+    search_product = enter_search.get()
+    
+    if len(x):
+        i = 0
+        for widget in frame_product_favoris.winfo_children(): 
+            if i == 0:
+                widget.config(text="Produit recherché")
+            else:
+                widget.grid_forget()
+            i += 1
+                
+        for widget in frame_product.winfo_children(): widget.grid_forget()
+            
+        
+        conn = sqlite3.connect(path_list_products)
+        cursor = conn.cursor()
+        list_products = cursor.execute("SELECT * FROM list_products").fetchall()
+        conn.commit()
+        conn.close()
+        
+        for product in list_products:
+            name_product = product[0]
+            if search_product in name_product:
+                x.append(product)
+                
+        i = 0
+        r = 2
+        for item in x:
+            frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
+            frame.grid(row=r, column=i % 2, pady=20, padx=5) 
+
+            name_product = item[0]
+            price_product = item[2]
+            
+            label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+
+            price = f"Prix: {price_product} FCFA"
+            label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
+            label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+            
+            bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
+            bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
+            
+            
+            if i % 2 != 0:
+                r += 1 
+            i += 1
+    else:
+        list_product()
+    
+
 
 window = tkinter.Tk()   
 window.geometry("1147x720")
@@ -499,6 +555,7 @@ label_logo.bind("<Button-1>", refresh)
 label_logo.place(x=40, y=15)
 
 enter_search = tkinter.Entry(frame_nav_menu)
+enter_search.bind("<Key>", search_product)
 enter_search.place(x=500, y=25)
 
 label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
