@@ -3,6 +3,7 @@ from tkinter import ttk
 import os
 import random
 import sqlite3
+from functools import partial
 from PIL import Image, ImageTk
 from style import style_admin, style_add_produt, style_client
 
@@ -20,6 +21,7 @@ i = 2
 def display_menu():
     frame_container_connection.place_forget()
     frame_container_recording.place_forget()
+    frame_price.grid(row=2, column=0, padx=950, pady=160)
     frame_main.place(x=0, y=0)
 
 
@@ -161,7 +163,7 @@ def list_product_favoris():
         label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
         label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
         
-        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7")
+        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
         bnt_cash.grid(row=1, column=1, padx=10, sticky="n")        
                 
         if i % 2 != 0:
@@ -195,13 +197,53 @@ def list_product():
         label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
         label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
         
-        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7")
+        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
         bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
         
         
         if i % 2 != 0:
             r += 1 
         i += 1
+        
+        
+def add_product_list_buy(name_product):
+    quantity = 1
+    d = {"name_product": name_product, "quantity_product": quantity}
+    for item in list_product_buy:
+        if item["name_product"] == name_product:
+            item["quantity_product"] += quantity
+            break
+    else:
+        list_product_buy.append(d) 
+    x()
+   
+def x():    
+    i = 1
+    for product in list_product_buy:
+        name_product = product["name_product"]
+        quantity = product["quantity_product"]
+        frame = tkinter.Frame(frame_price, bg="#F7F7F7", bd=1, relief="solid")
+        frame.grid(row=i, column=0)
+        
+        label_title = tkinter.Label(frame, text=name_product, bg="#F7F7F7")
+        label_title.grid(row=0, column=0)
+        
+        label_quantity = tkinter.Label(frame, text=quantity, bg="#F7F7F7")
+        label_quantity.grid(row=0, column=1)
+        
+        bnt_add = tkinter.Button(frame, image=img_add_product)
+        bnt_add.grid(row=1, column=0)
+        
+        bnt_delete_product = tkinter.Button(image=img_more, highlightbackground="#F7F7F7")
+        bnt_delete_product.grid(row=1, column=1)
+        
+        bnt_delete_product = tkinter.Button(image=img_less, highlightbackground="#F7F7F7")
+        bnt_delete_product.grid(row=1, column=1)
+                
+        label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7")
+        label_remove.grid(row=1, column=3)
+        i += 1
+        
 
 # event
 def del_error(event):
@@ -221,8 +263,11 @@ window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
 # Img
-img = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
-img_add_product = ImageTk.PhotoImage(img)
+img_main_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
+img_add_product = ImageTk.PhotoImage(img_main_add)
+img_more = ImageTk.PhotoImage(img_main_add.resize((10, 10)))
+
+img_less = ImageTk.PhotoImage((Image.open(f"{folder_img + '/' + 'icons8-moins-50.png'}").resize((10, 10))))
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
@@ -373,10 +418,12 @@ frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
 label_menu = tkinter.Label(frame_product, text="Menu", font=("Roboto", 14))
 label_menu.grid(row=0, column=0, sticky="w")
 
-frame_price = tkinter.Frame(frame_main, bg="#F7F7F7")
-frame_price.grid(row=2, column=0, sticky="e")
 
-label_achet = tkinter.Label(frame_price, text="Top des ventes", font=("Roboto", 14), bg="#F7F7F7")
+# frame panier
+list_product_buy = []
+frame_price = tkinter.Frame(window, bg="#F7F7F7", bd=1, relief="solid")
+
+label_achet = tkinter.Label(frame_price, justify="left", text="Top des ventes", font=("Roboto", 14), bg="#F7F7F7")
 label_achet.grid(row=0, column=0)
 
 list_product_favoris()
