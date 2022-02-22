@@ -215,9 +215,22 @@ def add_product_list_buy(name_product):
             break
     else:
         list_product_buy.append(d) 
-    x()
+    refresh_p()
    
-def x():    
+
+def less_product_list_buy(name_product, frame_del):
+    for product in list_product_buy:
+        if product["name_product"] == name_product:
+            if product["quantity_product"] == 1:
+                product["quantity_product"] -= 1   
+                frame_del.grid_forget()
+            else:
+                product["quantity_product"] -= 1   
+            refresh_p()
+            break
+   
+   
+def refresh_p():    
     i = 1
     for product in list_product_buy:
         name_product = product["name_product"]
@@ -234,7 +247,7 @@ def x():
         bnt_add = tkinter.Button(frame, image=img_more, command=partial(add_product_list_buy, name_product))
         bnt_add.grid(row=1, column=0, sticky="w")
         
-        bnt_delete_product = tkinter.Button(frame, image=img_less, highlightbackground="#F7F7F7")
+        bnt_delete_product = tkinter.Button(frame, image=img_less, highlightbackground="#F7F7F7", command=partial(less_product_list_buy, name_product, frame))
         bnt_delete_product.grid(row=1, column=1, padx=10, sticky="w")
                 
         label_remove = tkinter.Label(frame, text="Retirer", bg="#F7F7F7", fg="red", font=("Arial", 14))
