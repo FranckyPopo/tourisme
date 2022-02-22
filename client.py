@@ -4,6 +4,8 @@ import os
 import random
 import sqlite3
 from functools import partial
+from string import ascii_lowercase
+from datetime import datetime
 from PIL import Image, ImageTk
 from style import style_admin, style_add_produt, style_client
 
@@ -15,6 +17,10 @@ os.makedirs(folder_data, exist_ok=True)
 # BD
 path_list_client = folder_data + "/" + "list_client.bd"
 path_list_products = folder_data + "/" + "list_products.bd"
+path_list_commande = folder_data + "/" + "list_commande.bd"
+
+# ID du client
+_ID = None
 
 i = 2
 
@@ -94,9 +100,9 @@ def check_recording():
     
     
 def check_connection():
+    global _ID
     user_name = enter_user_name.get()
     password = enter_password_connection.get()
-    
     
     if user_name and password:
         conn = sqlite3.connect(path_list_client)
@@ -104,11 +110,12 @@ def check_connection():
         liste_client = cursor.execute("SELECT * FROM list_client").fetchall()
         conn.commit()
         conn.close()
-        
+    
         for client in liste_client:
             user_name_client = client[2]
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
+                _ID = client
                 display_menu()
                 break
         else:
@@ -131,6 +138,7 @@ def cancel_connection():
    
 def popup(event):
     global i
+    print(_ID)
     if i % 2 == 0:
         frame_pupop.place(x=980, y=35)
         i += 1
@@ -260,8 +268,77 @@ def refresh_p():
         label_remove.bind("<Button-1>", partial(del_product, name_product))
         label_remove.grid(row=1, column=3)
         i += 1
-        
+       
+    if len(list_product_buy) >= 1:
+        bnt_valided = tkinter.Button(frame_price, text="Commander", font=("Roboto", 13, "bold"), command=valided_menu)
+        bnt_valided.grid(row=i, column=0, pady=5, ipadx=3, ipady=2, columnspan=2)
 
+
+def id_code() -> str:
+    alphabet = list(ascii_lowercase)
+    code = []
+    for i in range(0, 5):
+        x = random.choice(alphabet)
+        code.append(x)
+    code = "".join(code)
+    
+    conn = sqlite3.connect(path_list_commande)
+    cursor = conn.cursor()
+    list_code = cursor.execute("SELECT * FROM id_code").fetchall()
+    conn.commit()
+    conn.close()
+    
+    for c in list_code:
+        if c[0] == code:
+            id_code()
+    return code
+
+def valided_menu():
+    conn = sqlite3.connect(path_list_commande)
+    cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS list_command (
+                mail_client text,
+                id_command text,
+                name_product text,
+                quantity_product int,
+                date_command text)
+                """)
+    cursor.execute("CREATE TABLE IF NOT EXISTS id_code (code text)")
+    conn.commit()
+    conn.close()
+
+    i = 0
+    for frame in frame_price.winfo_children():
+        if i != 0:
+            frame.destroy()
+        i += 1
+
+    mail = _ID[2]
+    id_command = id_code()
+    date_command = datetime.today().strftime("%d-%m-%Y")
+    for item in list_product_buy: 
+        name_product = item["name_product"]
+        quantity = item["quantity_product"]
+        d = {
+            "mail_client": mail,
+            "id_command": id_command,
+            "name_product": name_product,
+            "quantity": quantity,
+            "date_command": date_command
+        }
+        conn = sqlite3.connect(path_list_commande)
+        cursor = conn.cursor()
+        cursor.execute("""INSERT INTO list_command VALUES (
+                        :mail_client, :id_command, :name_product,
+                        :quantity, :date_command)""", d)
+        cursor.execute("INSERT INTO id_code VALUES (:id_command)", d)
+        conn.commit()
+        conn.close()
+        
+    for item in list_product_buy:
+        list_product_buy.remove(item)
+    
+    
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
@@ -285,6 +362,7 @@ window.geometry("1147x720")
 window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
+
 
 # Img
 img_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
