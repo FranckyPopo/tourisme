@@ -156,7 +156,8 @@ def list_product_favoris():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
                     name_product text, 
-                   quantity int)""")
+                    quantity_product int,
+                    price_product int)""")
     list_product = cursor.execute("SELECT * FROM list_products").fetchall()
     conn.commit()
     conn.close()
@@ -534,7 +535,7 @@ label_menu.grid(row=0, column=0, sticky="w")
 list_product_buy = []
 frame_price = tkinter.Frame(window, bg="#F7F7F7", bd=1, relief="solid")
 
-label_achet = tkinter.Label(frame_price, justify="left", text="Top des ventes", font=("Roboto", 14), bg="#F7F7F7")
+label_achet = tkinter.Label(frame_price, justify="left", text="Commandes", font=("Roboto", 14, "bold"), bg="#F7F7F7")
 label_achet.grid(row=0, column=0)
 
 list_product_favoris()
