@@ -165,7 +165,7 @@ def list_product_favoris():
         label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
 
         price = f"Prix: {price_product} FCFA"
-        label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
+        label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
         label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
         
         bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
@@ -199,7 +199,7 @@ def list_product():
         label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
 
         price = f"Prix: {price_product} FCFA"
-        label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
+        label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
         label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
         
         bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
