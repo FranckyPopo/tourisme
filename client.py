@@ -392,7 +392,7 @@ def search_product(event):
         frame_search.grid_forget()
         frame_product_favoris.grid(row=2, column=0, sticky="w")
         frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
-    elif len(x):
+    else:
         i = 0
         r = 2
         for item in x:
