@@ -130,26 +130,15 @@ def check_connection():
 
 def cancel_recording():
     frame_container_recording.place_forget()
-    frame_choice.place(x=200, y=150)    
+    frame_choice.place(x=500, y=280)    
     window.config(bg=style_admin.main_color)   
 
 
 def cancel_connection():
     frame_container_connection.place_forget()
-    frame_choice.place(x=200, y=150)    
+    frame_choice.place(x=500, y=280)    
     window.config(bg=style_admin.main_color)   
    
-   
-def popup(event):
-    global i
-    print(_ID)
-    if i % 2 == 0:
-        frame_pupop.place(x=980, y=35)
-        i += 1
-    else:
-        frame_pupop.place_forget()
-        i += 1
-
 
 def list_product_favoris():
     conn = sqlite3.connect(path_list_products)
@@ -351,7 +340,17 @@ def valided_menu():
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
- 
+    
+    
+def popup(event):
+    global i
+    if i % 2 == 0:
+        frame_pupop.place(x=990, y=45)
+        i += 1
+    else:
+        frame_pupop.place_forget()
+        i += 1
+
  
 def refresh(event):
     list_product_favoris()
@@ -418,12 +417,8 @@ def search_product(event):
             i += 1
         
 
-        
-        
-        
-        
-       
-
+def modify_count(event):
+    pass        
 
 
 window = tkinter.Tk()   
@@ -432,26 +427,29 @@ window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
-
 # Img
-img_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
-img_add_product = ImageTk.PhotoImage(img_add)
+photo_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
+img_add_product = ImageTk.PhotoImage(photo_add)
 
-img_add_two = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((25, 25))
-img_more = ImageTk.PhotoImage(img_add_two)
+photo_add_two = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((25, 25))
+img_more = ImageTk.PhotoImage(photo_add_two)
 
-img_del = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((25, 25))
-img_less = ImageTk.PhotoImage(img_del)
+photo_del = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((25, 25))
+img_less = ImageTk.PhotoImage(photo_del)
+
+photo_fleche = Image.open(f"{folder_img + '/' + 'icone_fleche.png'}").resize((25, 25))
+img_fleche = ImageTk.PhotoImage(photo_fleche)
+
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
-frame_choice.place(x=200, y=150)
+frame_choice.place(x=500, y=280)
 
-bnt_connection = tkinter.Button(frame_choice, text="Se connecter", command=display_connection)
-bnt_connection.grid(row=0, column=0, sticky="we")
+bnt_connection = tkinter.Button(frame_choice, text="Se connecter", command=display_connection, font=("Arial", 14))
+bnt_connection.grid(row=0, column=0, sticky="we", ipadx=3, ipady=5)
 
-bnt_recording = tkinter.Button(frame_choice, text="S'inscrire", command=display_recording)
-bnt_recording.grid(row=1, column=0, pady=10, sticky="we")
+bnt_recording = tkinter.Button(frame_choice, text="S'inscrire", command=display_recording, font=("Arial", 14))
+bnt_recording.grid(row=1, column=0, pady=10, sticky="we", ipadx=5, ipady=5)
 
 # frame connection
 frame_container_connection = tkinter.Frame(window, bg="#F7F7F7")
@@ -463,12 +461,12 @@ label_title_connection = tkinter.Label(frame_navbar_connection, text="POPO FOOD"
 label_title_connection.grid(row=0, column=0)
 
 frame_connection = tkinter.Frame(frame_container_connection, bg="#F7F7F7")
-frame_connection.grid(row=1, column=0, sticky='w', pady=25, padx=60)
+frame_connection.grid(row=1, column=0, sticky='w', pady=150, padx=350)
 
 label_user_name = tkinter.Label(frame_connection, text="Nom d'utilisateur", bg="#F7F7F7", font=style_client.font)
 label_user_name.grid(row=0, column=0, sticky="w", pady=4)
 enter_user_name = tkinter.Entry(frame_connection, highlightbackground="white")
-enter_user_name.bind("<Key>", del_error)
+enter_user_name.bind("<Key>", del_error)    
 enter_user_name.grid(row=1, column=0, sticky="we", pady=4)
 
 label_password = tkinter.Label(frame_connection, text="Mot de passe", bg="#F7F7F7", font=style_client.font)
@@ -567,17 +565,26 @@ label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=st
 label_search.place(x=620, y=20)
 
 label_name = tkinter.Label(frame_nav_menu, text="XXXXX", fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
-label_name.bind("<Button-1>", popup)
 label_name.place(x=980, y=12)
 
-# popup
-frame_pupop = tkinter.Frame(frame_nav_menu, bg=style_admin.main_color)
+canvas_fleche = tkinter.Canvas(frame_nav_menu, bg="#F7F7F7")
+label_fleche = tkinter.Label(canvas_fleche, image=img_fleche, bg=style_admin.main_color)
+label_fleche.bind("<Button-1>", popup)
+label_fleche.grid(row=0, column=0)
+canvas_fleche.place(x=1050, y=12)
 
-label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg=style_admin.main_color)
+# popup
+frame_pupop = tkinter.Frame(window, bg="white")
+
+label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg="white")
+label_count.bind("<Button-1>", modify_count)
+label_count.grid(row=0, column=0, sticky="w")
+
+label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
 label_count.grid(row=1, column=0, sticky="w")
 
-label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg=style_admin.main_color)
-label_connection.grid(row=1, column=0, sticky="w")
+label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white")
+label_connection.grid(row=2, column=0, sticky="w")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
@@ -588,6 +595,10 @@ label_top.grid(row=0, column=0, pady=30, sticky="w", padx=20)
 
 # Frame rechercher
 frame_search = tkinter.Frame(frame_main, bg="#F7F7F7")
+
+frame_count = tkinter.Frame(frame_main, bg="#F7F7F7")
+
+
 
 # frame product
 frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
