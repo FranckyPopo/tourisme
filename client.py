@@ -345,6 +345,13 @@ def get_data_client():
             return client
     
     
+def back_menu_one():
+    frame_count.grid_forget()
+    frame_product_favoris.grid(row=2, column=0, sticky="we")
+    frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
+    frame_price.grid(row=2, column=0, padx=900, pady=160)    
+    
+
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
@@ -431,10 +438,25 @@ def modify_count(event):
         name_user = enter_name_one.get()
         last_name = enter_name_two.get()
         first_name = enter_name_three.get()
-        email = enter_name_four.get()
+        email = ID[3]
+        password_current_n = enter_password_curent.get()
+        new_password_n = enter_new_password.get()
+        confimed_password_n = enter_confimed_password.get()
+
+        d = {"name_user": name_user, "last_name": last_name, "first_name": first_name, "email": email, "new_password": new_password_n}
         
-        if name_user and last_name and email:
-            d = {"name_user": name_user, "last_name": last_name, "first_name": first_name, "email": email}
+        if name_user and last_name and password_current_n and new_password_n and confimed_password_n:
+            password_count = ID[6]
+            if password_current_n == password_count and new_password_n == confimed_password_n:
+                conn = sqlite3.connect(path_list_client)
+                cursor = conn.cursor()
+                cursor.execute("UPDATE list_client SET user_name=:name_user, last_name=:last_name, first_name=:first_name, password=:new_password WHERE email=:email", d)
+                conn.commit()
+                conn.close()
+                messagebox.showinfo("Mise a jour profile", "Le profile vient d'être mise a jour")
+            else:
+                messagebox.showinfo("Mot de pass incorrecte", "Une erreur est survenue lors du changement du mot de passe.")
+        elif name_user and last_name and email:
             conn = sqlite3.connect(path_list_client)
             cursor = conn.cursor()
             cursor.execute("UPDATE list_client SET user_name=:name_user, last_name=:last_name, first_name=:first_name WHERE email=:email", d)
@@ -451,7 +473,6 @@ def modify_count(event):
     
     # ID du client
     ID = get_data_client()
-    frame_count = tkinter.Frame(frame_main, bg="#F7F7F7")
 
     label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7")
     label_title_one.grid(row=0, column=0, sticky="we")
@@ -482,23 +503,29 @@ def modify_count(event):
     label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7")
     label_title_four.grid(row=9, column=0, sticky="we")
 
-    label_name_four = tkinter.Label(frame_count, text="Email", bg="#F7F7F7")
-    label_name_four.grid(row=10, column=0, sticky="we")
-    enter_name_four = tkinter.Entry(frame_count)
-    enter_name_four.insert(0, ID[3])
-    enter_name_four.grid(row=11, column=0, sticky="we")
+    label_password_curent = tkinter.Label(frame_count, text="Mot de passe actuel", bg="#F7F7F7")
+    label_password_curent.grid(row=10, column=0, sticky="we")
+    enter_password_curent = tkinter.Entry(frame_count, show="*")
+    enter_password_curent.grid(row=11, column=0, sticky="we")
 
-    label_title_five = tkinter.Label(frame_count, text="Mobile", bg="#F7F7F7")
+    label_title_five = tkinter.Label(frame_count, text="Nouveau mot de passe", bg="#F7F7F7")
     label_title_five.grid(row=12, column=0, sticky="we")
-    enter_name_five = tkinter.Entry(frame_count)
-    enter_name_five.insert(0, ID[4])
-    enter_name_five.grid(row=13, column=0, sticky="we")
+    enter_new_password = tkinter.Entry(frame_count, show="*")
+    enter_new_password.grid(row=13, column=0, sticky="we")
+    
+    label_title_six = tkinter.Label(frame_count, text="Confirmer le mot de passe", bg="#F7F7F7")
+    label_title_six.grid(row=14, column=0, sticky="we")
+    enter_confimed_password = tkinter.Entry(frame_count, show="*")
+    enter_confimed_password.grid(row=15, column=0, sticky="we")
 
     error = tkinter.Label(frame_count, text="Une erreur est survenue lors de l'enregistrement de vos données",  bg="#F7F7F7", fg="#F7F7F7")
-    error.grid(row=14, column=0, sticky="w")
+    error.grid(row=16, column=0, sticky="w")
     
     bnt_valided_infos = tkinter.Button(frame_count, text="SAUVEGARDER LES MODIFICATION", command=modify_infos)
-    bnt_valided_infos.grid(row=15, column=0, sticky="we", ipadx=3, ipady=2)
+    bnt_valided_infos.grid(row=17, column=0, sticky="we", ipadx=3, ipady=2)
+
+    bnt_back_menu = tkinter.Button(frame_count, text="Retour", command=back_menu_one)
+    bnt_back_menu.grid(row=18, column=0, sticky="we", ipadx=3, ipady=2)
     
     frame_count.grid(row=1, column=0)
 
@@ -553,7 +580,7 @@ enter_user_name.grid(row=1, column=0, sticky="we", pady=4)
 
 label_password = tkinter.Label(frame_connection, text="Mot de passe", bg="#F7F7F7", font=style_client.font)
 label_password.grid(row=2, column=0, sticky="w", pady=4)
-enter_password_connection = tkinter.Entry(frame_connection, highlightbackground="white")
+enter_password_connection = tkinter.Entry(frame_connection, highlightbackground="white", show="*")
 enter_password_connection.bind("<Key>", del_error)
 enter_password_connection.grid(row=3, column=0, sticky="we", pady=4)
 
@@ -678,6 +705,9 @@ label_top.grid(row=0, column=0, pady=30, sticky="we", padx=20)
 
 # Frame rechercher
 frame_search = tkinter.Frame(frame_main, bg="#F7F7F7")
+
+# frame count
+frame_count = tkinter.Frame(frame_main, bg="#F7F7F7")
 
 # frame product
 frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
