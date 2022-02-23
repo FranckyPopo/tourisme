@@ -19,9 +19,6 @@ path_list_client = folder_data + "/" + "list_client.bd"
 path_list_products = folder_data + "/" + "list_products.bd"
 path_list_commande = folder_data + "/" + "list_commande.bd"
 
-# ID du client
-_ID = None
-
 i = 2
 
 def display_menu():
@@ -84,7 +81,8 @@ def check_recording():
         
         if error_exists:
             label_error_recording.config(fg="red")
-        else:
+
+            label_name.config(text=user_name)
             data_recording = {
                 "last_name": last_name,
                 "first_name": first_name,
@@ -96,7 +94,7 @@ def check_recording():
             }
             conn = sqlite3.connect(path_list_client)
             cursor = conn.cursor()
-            cursor.execute("""INSERT INTO list_client VALUES (:last_name, :first_name, :user_name, :email,
+            cursor.execute("""INSERT INTO list_client VALUES (:last_name,      :first_name, :user_name, :email,
                             :number_phone, :genre, :password)""", data_recording)
             conn.commit()
             conn.close()
@@ -104,7 +102,6 @@ def check_recording():
     
     
 def check_connection():
-    global _ID
     user_name = enter_user_name.get()
     password = enter_password_connection.get()
     
@@ -119,7 +116,7 @@ def check_connection():
             user_name_client = client[2]
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
-                _ID = client
+                label_name.config(text=f"{client[2]}")
                 display_menu()
                 break
         else:
@@ -167,9 +164,9 @@ def list_product_favoris():
         price = f"Prix: {price_product} FCFA"
         label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
         label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
-        
+
         bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
-        bnt_cash.grid(row=1, column=1, padx=10, sticky="n")        
+        bnt_cash.grid(row=1, column=1, padx=10, sticky="n", columnspan=2)        
                 
         if i % 2 != 0:
             r += 1
@@ -204,7 +201,6 @@ def list_product():
         
         bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
         bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
-        
         
         if i % 2 != 0:
             r += 1 
@@ -337,6 +333,18 @@ def valided_menu():
     list_product_buy = []
     
     
+def get_data_client():
+    conn = sqlite3.connect(path_list_client)
+    cursor = conn.cursor()
+    list_client = cursor.execute("SELECT * FROM list_client").fetchall()
+    conn.commit()
+    conn.close()
+
+    for client in list_client:
+        if client[2] == label_name["text"]:
+            return client
+    
+    
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
@@ -418,7 +426,55 @@ def search_product(event):
         
 
 def modify_count(event):
-    pass        
+    frame_product_favoris.grid_forget()
+    frame_product.grid_forget()
+    frame_price.grid_forget()
+    
+    # ID du client
+    ID = get_data_client()
+    frame_count = tkinter.Frame(frame_main, bg="#F7F7F7")
+
+    label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7")
+    label_title_one.grid(row=0, column=0, sticky="we")
+    label_text_one = tkinter.Label(frame_count, text="Ceci est votre espace privé. Veuillez garder vos informations à jour.", bg="#F7F7F7")
+    label_text_one.grid(row=1, column=0, sticky="we")
+
+    label_title_two = tkinter.Label(frame_count, text="Informations personnelles", bg="#F7F7F7")
+    label_title_two.grid(row=2, column=0, sticky="we")
+
+    label_name_one = tkinter.Label(frame_count, text="Nom d'utilisateur", bg="#F7F7F7")
+    label_name_one.grid(row=3, column=0, sticky="we")
+    enter_name_one = tkinter.Entry(frame_count)
+    enter_name_one.insert(0, ID[2])
+    enter_name_one.grid(row=4, column=0, sticky="we")
+
+    label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7")
+    label_name_two.grid(row=5, column=0, sticky="we")
+    enter_name_two = tkinter.Entry(frame_count)
+    enter_name_two.grid(row=6, column=0, sticky="we")
+
+    label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7")
+    label_name_three.grid(row=7, column=0, sticky="we")
+    enter_name_three = tkinter.Entry(frame_count)
+    enter_name_three.grid(row=8, column=0, sticky="we")
+
+    label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7")
+    label_title_four.grid(row=9, column=0, sticky="we")
+
+    label_name_four = tkinter.Label(frame_count, text="Email", bg="#F7F7F7")
+    label_name_four.grid(row=10, column=0, sticky="we")
+    enter_name_four = tkinter.Entry(frame_count)
+    enter_name_four.grid(row=11, column=0, sticky="we")
+
+    label_title_five = tkinter.Label(frame_count, text="Mobile", bg="#F7F7F7")
+    label_title_five.grid(row=12, column=0, sticky="we")
+    enter_name_five = tkinter.Entry(frame_count)
+    enter_name_five.grid(row=13, column=0, sticky="we")
+
+    bnt_valided_infos = tkinter.Button(frame_count, text="SAUVEGARDER LES MODIFICATION")
+    bnt_valided_infos.grid(row=14, column=0, sticky="we")
+    
+    frame_count.grid(row=1, column=0)
 
 
 window = tkinter.Tk()   
@@ -548,7 +604,7 @@ bnt_cancel_recording = tkinter.Button(frame_recording, text="Retour", font=("Rob
 bnt_cancel_recording.grid(row=18, column=0, sticky="we", pady=4, ipadx=3, ipady=10)
 
 # frame menu
-frame_main = tkinter.Frame(window, bg="#F7F7F7", bd=2, relief="solid")
+frame_main = tkinter.Frame(window, bg="#F7F7F7")
 
 frame_nav_menu = tkinter.Frame(frame_main, bg=style_admin.main_color, height=80)
 frame_nav_menu.grid(row=0, column=0, ipadx=570)
@@ -564,47 +620,44 @@ enter_search.place(x=500, y=25)
 label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
 label_search.place(x=620, y=20)
 
-label_name = tkinter.Label(frame_nav_menu, text="XXXXX", fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
+#profile_name = f"{_ID[0]} {_ID[1]}"
+label_name = tkinter.Label(frame_nav_menu, fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
 label_name.place(x=980, y=12)
 
 canvas_fleche = tkinter.Canvas(frame_nav_menu, bg="#F7F7F7")
 label_fleche = tkinter.Label(canvas_fleche, image=img_fleche, bg=style_admin.main_color)
 label_fleche.bind("<Button-1>", popup)
 label_fleche.grid(row=0, column=0)
-canvas_fleche.place(x=1050, y=12)
+canvas_fleche.place(x=1080, y=12)
 
 # popup
 frame_pupop = tkinter.Frame(window, bg="white")
 
 label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg="white")
 label_count.bind("<Button-1>", modify_count)
-label_count.grid(row=0, column=0, sticky="w")
+label_count.grid(row=0, column=0, sticky="we")
 
 label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
-label_count.grid(row=1, column=0, sticky="w")
+label_count.grid(row=1, column=0, sticky="we")
 
 label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white")
-label_connection.grid(row=2, column=0, sticky="w")
+label_connection.grid(row=2, column=0, sticky="we")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
-frame_product_favoris.grid(row=2, column=0, sticky="w")
+frame_product_favoris.grid(row=2, column=0, sticky="we")
 
 label_top = tkinter.Label(frame_product_favoris, text="Top des ventes", bg="#F7F7F7", font=("Roboto", 14))
-label_top.grid(row=0, column=0, pady=30, sticky="w", padx=20)
+label_top.grid(row=0, column=0, pady=30, sticky="we", padx=20)
 
 # Frame rechercher
 frame_search = tkinter.Frame(frame_main, bg="#F7F7F7")
-
-frame_count = tkinter.Frame(frame_main, bg="#F7F7F7")
-
-
 
 # frame product
 frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
 frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
 
-label_menu = tkinter.Label(frame_product, text="Menu", font=("Roboto", 14))
+label_menu = tkinter.Label(frame_product, text="Menu", font=("Roboto", 14), bg="#F7F7F7")
 label_menu.grid(row=0, column=0, sticky="w")
 
 # frame panier
