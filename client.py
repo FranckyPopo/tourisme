@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import os
 import random
 import sqlite3
@@ -426,6 +426,25 @@ def search_product(event):
         
 
 def modify_count(event):
+    
+    def modify_infos():
+        name_user = enter_name_one.get()
+        last_name = enter_name_two.get()
+        first_name = enter_name_three.get()
+        email = enter_name_four.get()
+        
+        if name_user and last_name and email:
+            d = {"name_user": name_user, "last_name": last_name, "first_name": first_name, "email": email}
+            conn = sqlite3.connect(path_list_client)
+            cursor = conn.cursor()
+            cursor.execute("UPDATE list_client SET user_name=:name_user, last_name=:last_name, first_name=:first_name WHERE email=:email", d)
+            conn.commit()
+            conn.close()
+            messagebox.showinfo("Mise a jour profile", "Le profile vient d'être mise a jour")
+        else:
+            error.config(fg="red")
+        
+    
     frame_product_favoris.grid_forget()
     frame_product.grid_forget()
     frame_price.grid_forget()
@@ -451,11 +470,13 @@ def modify_count(event):
     label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7")
     label_name_two.grid(row=5, column=0, sticky="we")
     enter_name_two = tkinter.Entry(frame_count)
+    enter_name_two.insert(0, ID[0])
     enter_name_two.grid(row=6, column=0, sticky="we")
 
     label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7")
     label_name_three.grid(row=7, column=0, sticky="we")
     enter_name_three = tkinter.Entry(frame_count)
+    enter_name_three.insert(0, ID[1])
     enter_name_three.grid(row=8, column=0, sticky="we")
 
     label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7")
@@ -464,15 +485,20 @@ def modify_count(event):
     label_name_four = tkinter.Label(frame_count, text="Email", bg="#F7F7F7")
     label_name_four.grid(row=10, column=0, sticky="we")
     enter_name_four = tkinter.Entry(frame_count)
+    enter_name_four.insert(0, ID[3])
     enter_name_four.grid(row=11, column=0, sticky="we")
 
     label_title_five = tkinter.Label(frame_count, text="Mobile", bg="#F7F7F7")
     label_title_five.grid(row=12, column=0, sticky="we")
     enter_name_five = tkinter.Entry(frame_count)
+    enter_name_five.insert(0, ID[4])
     enter_name_five.grid(row=13, column=0, sticky="we")
 
-    bnt_valided_infos = tkinter.Button(frame_count, text="SAUVEGARDER LES MODIFICATION")
-    bnt_valided_infos.grid(row=14, column=0, sticky="we")
+    error = tkinter.Label(frame_count, text="Une erreur est survenue lors de l'enregistrement de vos données",  bg="#F7F7F7", fg="#F7F7F7")
+    error.grid(row=14, column=0, sticky="w")
+    
+    bnt_valided_infos = tkinter.Button(frame_count, text="SAUVEGARDER LES MODIFICATION", command=modify_infos)
+    bnt_valided_infos.grid(row=15, column=0, sticky="we", ipadx=3, ipady=2)
     
     frame_count.grid(row=1, column=0)
 
