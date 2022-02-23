@@ -368,6 +368,10 @@ def del_product(event, name_product):
         
 def search_product(event):
     x = list()
+    frame_search.grid(row=2, column=0, pady=30, sticky="w", padx=20)
+    frame_product_favoris.grid_forget()
+    frame_product.grid_forget()
+    
     conn = sqlite3.connect(path_list_products)
     cursor = conn.cursor()
     list_products = cursor.execute("SELECT * FROM list_products").fetchall()
@@ -376,25 +380,23 @@ def search_product(event):
     search_product = enter_search.get()
     
     for product in list_products:
-            name_product = product[0]
-            if search_product in name_product:
-                x.append(product)
-    if len(x):
-        i = 0
-        for widget in frame_product_favoris.winfo_children(): 
-            if i == 0:
-                widget.config(text="Produit recherché")
-            else:
-                widget.grid_forget()
-            i += 1
-                
-        for widget in frame_product.winfo_children(): widget.grid_forget()
-            
-                
+        name_product = product[0]
+        if search_product in name_product:
+            x.append(product)
+
+    if not search_product:            
+        frame_search.grid_forget()
+        frame_product_favoris.grid(row=2, column=0, sticky="w")
+        frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
+    elif not x:
+        frame_search.grid_forget()
+        frame_product_favoris.grid(row=2, column=0, sticky="w")
+        frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
+    elif len(x):
         i = 0
         r = 2
         for item in x:
-            frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
+            frame = tkinter.Frame(frame_search, bg="#F7F7F7", bd=1, relief="solid")
             frame.grid(row=r, column=i % 2, pady=20, padx=5) 
 
             name_product = item[0]
@@ -414,9 +416,14 @@ def search_product(event):
             if i % 2 != 0:
                 r += 1 
             i += 1
-    else:
-        list_product()
-    
+        
+
+        
+        
+        
+        
+       
+
 
 
 window = tkinter.Tk()   
@@ -578,6 +585,9 @@ frame_product_favoris.grid(row=2, column=0, sticky="w")
 
 label_top = tkinter.Label(frame_product_favoris, text="Top des ventes", bg="#F7F7F7", font=("Roboto", 14))
 label_top.grid(row=0, column=0, pady=30, sticky="w", padx=20)
+
+# Frame rechercher
+frame_search = tkinter.Frame(frame_main, bg="#F7F7F7")
 
 # frame product
 frame_product = tkinter.Frame(frame_main, bg="#F7F7F7")
