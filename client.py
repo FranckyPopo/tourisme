@@ -368,8 +368,17 @@ def del_product(event, name_product):
         
 def search_product(event):
     x = list()
+    conn = sqlite3.connect(path_list_products)
+    cursor = conn.cursor()
+    list_products = cursor.execute("SELECT * FROM list_products").fetchall()
+    conn.commit()
+    conn.close()
     search_product = enter_search.get()
     
+    for product in list_products:
+            name_product = product[0]
+            if search_product in name_product:
+                x.append(product)
     if len(x):
         i = 0
         for widget in frame_product_favoris.winfo_children(): 
@@ -381,17 +390,6 @@ def search_product(event):
                 
         for widget in frame_product.winfo_children(): widget.grid_forget()
             
-        
-        conn = sqlite3.connect(path_list_products)
-        cursor = conn.cursor()
-        list_products = cursor.execute("SELECT * FROM list_products").fetchall()
-        conn.commit()
-        conn.close()
-        
-        for product in list_products:
-            name_product = product[0]
-            if search_product in name_product:
-                x.append(product)
                 
         i = 0
         r = 2
