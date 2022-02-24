@@ -531,6 +531,10 @@ def modify_count(event):
     frame_count.grid(row=1, column=0)
 
 
+def disconnection(event):
+    pass
+
+
 window = tkinter.Tk()   
 window.geometry("1147x730")
 window.resizable(False, False)
@@ -674,7 +678,6 @@ enter_search.place(x=500, y=25)
 label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
 label_search.place(x=620, y=20)
 
-#profile_name = f"{_ID[0]} {_ID[1]}"
 label_name = tkinter.Label(frame_nav_menu, fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
 label_name.place(x=980, y=12)
 
@@ -691,11 +694,12 @@ label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg="white")
 label_count.bind("<Button-1>", modify_count)
 label_count.grid(row=0, column=0, sticky="we")
 
-label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
-label_count.grid(row=1, column=0, sticky="we")
+# label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
+# label_count.grid(row=1, column=0, sticky="we")
 
-label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white")
-label_connection.grid(row=2, column=0, sticky="we")
+label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white", fg="red")
+label_connection.bind("<Button-1>", disconnection)
+label_connection.grid(row=1, column=0, sticky="we")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
