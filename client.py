@@ -532,7 +532,12 @@ def modify_count(event):
 
 
 def disconnection(event):
-    pass
+    frame_main.place_forget()
+    frame_pupop.place_forget()
+    frame_price.grid_forget()
+    window.config(bg=style_admin.main_color)
+    frame_choice.place(x=500, y=280)
+    
 
 
 window = tkinter.Tk()   
@@ -553,7 +558,6 @@ img_less = ImageTk.PhotoImage(photo_del)
 
 photo_fleche = Image.open(f"{folder_img + '/' + 'icone_fleche.png'}").resize((25, 25))
 img_fleche = ImageTk.PhotoImage(photo_fleche)
-
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
