@@ -79,9 +79,7 @@ def check_recording():
                 error_exists = True
                 break
         
-        if error_exists:
-            label_error_recording.config(fg="red")
-
+        if not error_exists:
             label_name.config(text=user_name)
             data_recording = {
                 "last_name": last_name,
@@ -99,12 +97,14 @@ def check_recording():
             conn.commit()
             conn.close()
             display_menu()
-    
-    
+        else:
+            label_error_recording.config(fg="red")
+            
+
 def check_connection():
     user_name = enter_user_name.get()
     password = enter_password_connection.get()
-    
+
     if user_name and password:
         conn = sqlite3.connect(path_list_client)
         cursor = conn.cursor()
@@ -308,14 +308,15 @@ def valided_menu():
             frame.destroy()
         i += 1
 
-    mail = _ID[2]
+    ID = get_data_client()
+    email = ID[3]
     id_command = id_code()
     date_command = datetime.today().strftime("%d-%m-%Y")
     for item in list_product_buy: 
         name_product = item["name_product"]
         quantity = item["quantity_product"]
         d = {
-            "mail_client": mail,
+            "mail_client": email,
             "id_command": id_command,
             "name_product": name_product,
             "quantity": quantity,
@@ -531,7 +532,7 @@ def modify_count(event):
 
 
 window = tkinter.Tk()   
-window.geometry("1147x720")
+window.geometry("1147x730")
 window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
@@ -639,12 +640,12 @@ enter_genre_sexe.grid(row=11, column=0, sticky="we", pady=4)
 
 label_password = tkinter.Label(frame_recording, text="Mot de passe", bg="#F7F7F7", font=style_client.font)
 label_password.grid(row=12, column=0, sticky="w", pady=4)
-enter_password = tkinter.Entry(frame_recording, highlightbackground="white")
+enter_password = tkinter.Entry(frame_recording, highlightbackground="white", show="*")
 enter_password.grid(row=13, column=0, sticky="we", pady=4)            
                  
 label_check_password = tkinter.Label(frame_recording, text="Confirmer le mot de passe", bg="#F7F7F7", font=style_client.font)
 label_check_password.grid(row=14, column=0, sticky="w", pady=4)
-enter_check_password = tkinter.Entry(frame_recording, highlightbackground="white")
+enter_check_password = tkinter.Entry(frame_recording, highlightbackground="white", show="*")
 enter_check_password.grid(row=15, column=0, sticky="we", pady=4)
 
 label_error_recording = tkinter.Label(frame_recording, text="Une erreur est survenue lors de l'enregistrement", fg="#F7F7F7", bg="#F7F7F7", font=style_client.font)
