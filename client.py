@@ -96,6 +96,13 @@ def check_recording():
                             :number_phone, :genre, :password)""", data_recording)
             conn.commit()
             conn.close()
+            enter_last_name.delete(0, "end")
+            enter_first_name.delete(0, "end")
+            enter_user.delete(0, "end")
+            enter_email.delete(0, "end")
+            enter_genre_sexe.delete(0, "end")
+            enter_password.delete(0, "end")
+            enter_check_password.delete(0, "end")
             display_menu()
         else:
             label_error_recording.config(fg="red")
@@ -117,7 +124,12 @@ def check_connection():
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
                 label_name.config(text=f"{client[2]}")
+                enter_user_name.delete(0, "end")
+                enter_password_connection.delete(0, "end")
                 display_menu()
+                frame_count.grid_forget()
+                frame_product_favoris.grid(row=2, column=0, sticky="we")
+                
                 break
         else:
             label_error_connection.config(fg="red")
