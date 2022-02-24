@@ -487,47 +487,47 @@ def modify_count(event):
     # ID du client
     ID = get_data_client()
 
-    label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7")
-    label_title_one.grid(row=0, column=0, sticky="we")
-    label_text_one = tkinter.Label(frame_count, text="Ceci est votre espace privé. Veuillez garder vos informations à jour.", bg="#F7F7F7")
-    label_text_one.grid(row=1, column=0, sticky="we")
+    label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7", font=("Roboto", 30, "bold"))
+    label_title_one.grid(row=0, column=0, sticky="w", pady=10)
+    label_text_one = tkinter.Label(frame_count, text="Ceci est votre espace privé. Veuillez garder vos informations à jour.", bg="#F7F7F7", font=("Arial", 22))
+    label_text_one.grid(row=1, column=0, sticky="w", pady=5)
 
-    label_title_two = tkinter.Label(frame_count, text="Informations personnelles", bg="#F7F7F7")
-    label_title_two.grid(row=2, column=0, sticky="we")
+    label_title_two = tkinter.Label(frame_count, text="Informations personnelles", bg="#F7F7F7", font=("Roboto", 20, "bold"))
+    label_title_two.grid(row=2, column=0, sticky="w", pady=20)
 
-    label_name_one = tkinter.Label(frame_count, text="Nom d'utilisateur", bg="#F7F7F7")
-    label_name_one.grid(row=3, column=0, sticky="we")
+    label_name_one = tkinter.Label(frame_count, text="Nom d'utilisateur", bg="#F7F7F7", font=("Arial", 18))
+    label_name_one.grid(row=3, column=0, sticky="w")
     enter_name_one = tkinter.Entry(frame_count)
     enter_name_one.insert(0, ID[2])
     enter_name_one.grid(row=4, column=0, sticky="we")
 
-    label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7")
-    label_name_two.grid(row=5, column=0, sticky="we")
+    label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7", font=("Arial", 18))
+    label_name_two.grid(row=5, column=0, sticky="w")
     enter_name_two = tkinter.Entry(frame_count)
     enter_name_two.insert(0, ID[0])
     enter_name_two.grid(row=6, column=0, sticky="we")
 
-    label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7")
-    label_name_three.grid(row=7, column=0, sticky="we")
+    label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7", font=("Arial", 18))
+    label_name_three.grid(row=7, column=0, sticky="w")
     enter_name_three = tkinter.Entry(frame_count)
     enter_name_three.insert(0, ID[1])
     enter_name_three.grid(row=8, column=0, sticky="we")
 
-    label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7")
-    label_title_four.grid(row=9, column=0, sticky="we")
+    label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7", font=("Arial", 22, "bold"))
+    label_title_four.grid(row=9, column=0, sticky="w", pady=20)
 
-    label_password_curent = tkinter.Label(frame_count, text="Mot de passe actuel", bg="#F7F7F7")
-    label_password_curent.grid(row=10, column=0, sticky="we")
+    label_password_curent = tkinter.Label(frame_count, text="Mot de passe actuel", bg="#F7F7F7", font=("Arial", 18))
+    label_password_curent.grid(row=10, column=0, sticky="w")
     enter_password_curent = tkinter.Entry(frame_count, show="*")
     enter_password_curent.grid(row=11, column=0, sticky="we")
 
-    label_title_five = tkinter.Label(frame_count, text="Nouveau mot de passe", bg="#F7F7F7")
-    label_title_five.grid(row=12, column=0, sticky="we")
+    label_title_five = tkinter.Label(frame_count, text="Nouveau mot de passe", bg="#F7F7F7", font=("Arial", 18))
+    label_title_five.grid(row=12, column=0, sticky="w")
     enter_new_password = tkinter.Entry(frame_count, show="*")
     enter_new_password.grid(row=13, column=0, sticky="we")
     
-    label_title_six = tkinter.Label(frame_count, text="Confirmer le mot de passe", bg="#F7F7F7")
-    label_title_six.grid(row=14, column=0, sticky="we")
+    label_title_six = tkinter.Label(frame_count, text="Confirmer le mot de passe", bg="#F7F7F7", font=("Arial", 18))
+    label_title_six.grid(row=14, column=0, sticky="w")
     enter_confimed_password = tkinter.Entry(frame_count, show="*")
     enter_confimed_password.grid(row=15, column=0, sticky="we")
 
@@ -538,7 +538,7 @@ def modify_count(event):
     bnt_valided_infos.grid(row=17, column=0, sticky="we", ipadx=3, ipady=2)
 
     bnt_back_menu = tkinter.Button(frame_count, text="Retour", command=back_menu_one)
-    bnt_back_menu.grid(row=18, column=0, sticky="we", ipadx=3, ipady=2)
+    bnt_back_menu.grid(row=18, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
     
     frame_count.grid(row=1, column=0)
 
@@ -553,7 +553,7 @@ def disconnection(event):
 
 
 window = tkinter.Tk()   
-window.geometry("1147x730")
+window.geometry("1147x930")
 window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
@@ -692,7 +692,7 @@ enter_search.bind("<Key>", search_product)
 enter_search.place(x=500, y=25)
 
 label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
-label_search.place(x=620, y=20)
+label_search.place(x=700, y=26)
 
 label_name = tkinter.Label(frame_nav_menu, fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
 label_name.place(x=980, y=12)
