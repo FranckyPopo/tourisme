@@ -79,9 +79,7 @@ def check_recording():
                 error_exists = True
                 break
         
-        if error_exists:
-            label_error_recording.config(fg="red")
-
+        if not error_exists:
             label_name.config(text=user_name)
             data_recording = {
                 "last_name": last_name,
@@ -98,13 +96,22 @@ def check_recording():
                             :number_phone, :genre, :password)""", data_recording)
             conn.commit()
             conn.close()
+            enter_last_name.delete(0, "end")
+            enter_first_name.delete(0, "end")
+            enter_user.delete(0, "end")
+            enter_email.delete(0, "end")
+            enter_genre_sexe.delete(0, "end")
+            enter_password.delete(0, "end")
+            enter_check_password.delete(0, "end")
             display_menu()
-    
-    
+        else:
+            label_error_recording.config(fg="red")
+            
+
 def check_connection():
     user_name = enter_user_name.get()
     password = enter_password_connection.get()
-    
+
     if user_name and password:
         conn = sqlite3.connect(path_list_client)
         cursor = conn.cursor()
@@ -117,7 +124,12 @@ def check_connection():
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
                 label_name.config(text=f"{client[2]}")
+                enter_user_name.delete(0, "end")
+                enter_password_connection.delete(0, "end")
                 display_menu()
+                frame_count.grid_forget()
+                frame_product_favoris.grid(row=2, column=0, sticky="we")
+                
                 break
         else:
             label_error_connection.config(fg="red")
@@ -308,14 +320,15 @@ def valided_menu():
             frame.destroy()
         i += 1
 
-    mail = _ID[2]
+    ID = get_data_client()
+    email = ID[3]
     id_command = id_code()
     date_command = datetime.today().strftime("%d-%m-%Y")
     for item in list_product_buy: 
         name_product = item["name_product"]
         quantity = item["quantity_product"]
         d = {
-            "mail_client": mail,
+            "mail_client": email,
             "id_command": id_command,
             "name_product": name_product,
             "quantity": quantity,
@@ -474,47 +487,47 @@ def modify_count(event):
     # ID du client
     ID = get_data_client()
 
-    label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7")
-    label_title_one.grid(row=0, column=0, sticky="we")
-    label_text_one = tkinter.Label(frame_count, text="Ceci est votre espace privé. Veuillez garder vos informations à jour.", bg="#F7F7F7")
-    label_text_one.grid(row=1, column=0, sticky="we")
+    label_title_one = tkinter.Label(frame_count, text="Paramètres du compte", bg="#F7F7F7", font=("Roboto", 30, "bold"))
+    label_title_one.grid(row=0, column=0, sticky="w", pady=10)
+    label_text_one = tkinter.Label(frame_count, text="Ceci est votre espace privé. Veuillez garder vos informations à jour.", bg="#F7F7F7", font=("Arial", 22))
+    label_text_one.grid(row=1, column=0, sticky="w", pady=5)
 
-    label_title_two = tkinter.Label(frame_count, text="Informations personnelles", bg="#F7F7F7")
-    label_title_two.grid(row=2, column=0, sticky="we")
+    label_title_two = tkinter.Label(frame_count, text="Informations personnelles", bg="#F7F7F7", font=("Roboto", 20, "bold"))
+    label_title_two.grid(row=2, column=0, sticky="w", pady=20)
 
-    label_name_one = tkinter.Label(frame_count, text="Nom d'utilisateur", bg="#F7F7F7")
-    label_name_one.grid(row=3, column=0, sticky="we")
+    label_name_one = tkinter.Label(frame_count, text="Nom d'utilisateur", bg="#F7F7F7", font=("Arial", 18))
+    label_name_one.grid(row=3, column=0, sticky="w")
     enter_name_one = tkinter.Entry(frame_count)
     enter_name_one.insert(0, ID[2])
     enter_name_one.grid(row=4, column=0, sticky="we")
 
-    label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7")
-    label_name_two.grid(row=5, column=0, sticky="we")
+    label_name_two = tkinter.Label(frame_count, text="Nom", bg="#F7F7F7", font=("Arial", 18))
+    label_name_two.grid(row=5, column=0, sticky="w")
     enter_name_two = tkinter.Entry(frame_count)
     enter_name_two.insert(0, ID[0])
     enter_name_two.grid(row=6, column=0, sticky="we")
 
-    label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7")
-    label_name_three.grid(row=7, column=0, sticky="we")
+    label_name_three = tkinter.Label(frame_count, text="Prénom", bg="#F7F7F7", font=("Arial", 18))
+    label_name_three.grid(row=7, column=0, sticky="w")
     enter_name_three = tkinter.Entry(frame_count)
     enter_name_three.insert(0, ID[1])
     enter_name_three.grid(row=8, column=0, sticky="we")
 
-    label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7")
-    label_title_four.grid(row=9, column=0, sticky="we")
+    label_title_four = tkinter.Label(frame_count, text="Détails de contact", bg="#F7F7F7", font=("Arial", 22, "bold"))
+    label_title_four.grid(row=9, column=0, sticky="w", pady=20)
 
-    label_password_curent = tkinter.Label(frame_count, text="Mot de passe actuel", bg="#F7F7F7")
-    label_password_curent.grid(row=10, column=0, sticky="we")
+    label_password_curent = tkinter.Label(frame_count, text="Mot de passe actuel", bg="#F7F7F7", font=("Arial", 18))
+    label_password_curent.grid(row=10, column=0, sticky="w")
     enter_password_curent = tkinter.Entry(frame_count, show="*")
     enter_password_curent.grid(row=11, column=0, sticky="we")
 
-    label_title_five = tkinter.Label(frame_count, text="Nouveau mot de passe", bg="#F7F7F7")
-    label_title_five.grid(row=12, column=0, sticky="we")
+    label_title_five = tkinter.Label(frame_count, text="Nouveau mot de passe", bg="#F7F7F7", font=("Arial", 18))
+    label_title_five.grid(row=12, column=0, sticky="w")
     enter_new_password = tkinter.Entry(frame_count, show="*")
     enter_new_password.grid(row=13, column=0, sticky="we")
     
-    label_title_six = tkinter.Label(frame_count, text="Confirmer le mot de passe", bg="#F7F7F7")
-    label_title_six.grid(row=14, column=0, sticky="we")
+    label_title_six = tkinter.Label(frame_count, text="Confirmer le mot de passe", bg="#F7F7F7", font=("Arial", 18))
+    label_title_six.grid(row=14, column=0, sticky="w")
     enter_confimed_password = tkinter.Entry(frame_count, show="*")
     enter_confimed_password.grid(row=15, column=0, sticky="we")
 
@@ -525,13 +538,22 @@ def modify_count(event):
     bnt_valided_infos.grid(row=17, column=0, sticky="we", ipadx=3, ipady=2)
 
     bnt_back_menu = tkinter.Button(frame_count, text="Retour", command=back_menu_one)
-    bnt_back_menu.grid(row=18, column=0, sticky="we", ipadx=3, ipady=2)
+    bnt_back_menu.grid(row=18, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
     
     frame_count.grid(row=1, column=0)
 
 
+def disconnection(event):
+    frame_main.place_forget()
+    frame_pupop.place_forget()
+    frame_price.grid_forget()
+    window.config(bg=style_admin.main_color)
+    frame_choice.place(x=500, y=280)
+    
+
+
 window = tkinter.Tk()   
-window.geometry("1147x720")
+window.geometry("1147x930")
 window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
@@ -548,7 +570,6 @@ img_less = ImageTk.PhotoImage(photo_del)
 
 photo_fleche = Image.open(f"{folder_img + '/' + 'icone_fleche.png'}").resize((25, 25))
 img_fleche = ImageTk.PhotoImage(photo_fleche)
-
 
 # frame connection ou inscription
 frame_choice = tkinter.Frame(window, bg=style_admin.main_color)
@@ -639,12 +660,12 @@ enter_genre_sexe.grid(row=11, column=0, sticky="we", pady=4)
 
 label_password = tkinter.Label(frame_recording, text="Mot de passe", bg="#F7F7F7", font=style_client.font)
 label_password.grid(row=12, column=0, sticky="w", pady=4)
-enter_password = tkinter.Entry(frame_recording, highlightbackground="white")
+enter_password = tkinter.Entry(frame_recording, highlightbackground="white", show="*")
 enter_password.grid(row=13, column=0, sticky="we", pady=4)            
                  
 label_check_password = tkinter.Label(frame_recording, text="Confirmer le mot de passe", bg="#F7F7F7", font=style_client.font)
 label_check_password.grid(row=14, column=0, sticky="w", pady=4)
-enter_check_password = tkinter.Entry(frame_recording, highlightbackground="white")
+enter_check_password = tkinter.Entry(frame_recording, highlightbackground="white", show="*")
 enter_check_password.grid(row=15, column=0, sticky="we", pady=4)
 
 label_error_recording = tkinter.Label(frame_recording, text="Une erreur est survenue lors de l'enregistrement", fg="#F7F7F7", bg="#F7F7F7", font=style_client.font)
@@ -671,9 +692,8 @@ enter_search.bind("<Key>", search_product)
 enter_search.place(x=500, y=25)
 
 label_search = tkinter.Label(frame_nav_menu, text="Rechecher", fg="white", bg=style_admin.main_color, font=("roboto", 14))
-label_search.place(x=620, y=20)
+label_search.place(x=700, y=26)
 
-#profile_name = f"{_ID[0]} {_ID[1]}"
 label_name = tkinter.Label(frame_nav_menu, fg="white", bg=style_admin.main_color, font=("roboto", 14, "bold"))
 label_name.place(x=980, y=12)
 
@@ -690,11 +710,12 @@ label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg="white")
 label_count.bind("<Button-1>", modify_count)
 label_count.grid(row=0, column=0, sticky="we")
 
-label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
-label_count.grid(row=1, column=0, sticky="we")
+# label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
+# label_count.grid(row=1, column=0, sticky="we")
 
-label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white")
-label_connection.grid(row=2, column=0, sticky="we")
+label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white", fg="red")
+label_connection.bind("<Button-1>", disconnection)
+label_connection.grid(row=1, column=0, sticky="we")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
