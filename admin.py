@@ -111,7 +111,8 @@ def admin_space():
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
                     name_product text,
                     quantity_product int,
-                    price_product int)""")
+                    price_product int,
+                    description text)""")
     data = cursor.execute("SELECT * FROM list_products")
     list_product = data.fetchall()
     conn.commit()
@@ -146,7 +147,8 @@ def window_add_product():
 
     
     def add_product():
-        name_product = enter_name_product.get().strip()
+        name_product = enter_name_product.get().strip().capitalize()
+        description_product = enter_description_product.get(1.0, "end").strip().capitalize()
         try:
             quantity_product = int(enter_quantity_product.get())
             price_product = int(enter_price_product.get())
@@ -165,47 +167,56 @@ def window_add_product():
                     label_error_add_product.config(fg="#FF0505")
                     break
             else:
-                product = {"name_product": name_product, "quantity_product": quantity_product, "price_product": price_product}
+                product = {"name_product": name_product, "description_product": description_product, "quantity_product": quantity_product, "price_product": price_product}
                 conn = sqlite3.connect(path_list_products)
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product, :price_product)", product)
+                cursor.execute("INSERT INTO list_products VALUES (:name_product, :quantity_product, :price_product, :description_product)", product)
                 conn.commit()
                 conn.close()
                 label_error_add_product.config(fg=style_admin.main_color)
                 enter_name_product.delete(0, "end")
                 enter_quantity_product.delete(0, "end")
                 messagebox.showinfo("Ajout produit", "Félicitation le produit a été ajouté avec succès")
+                enter_name_product.delete(0, "end")
+                enter_description_product.delete(1.0, "end")
+                enter_quantity_product.delete(0, "end")
+                enter_price_product.delete(0, "end")
                 admin_space()
         
 
     root = tkinter.Toplevel()
-    root.geometry("480x320")
+    root.geometry("480x400")
     root.resizable(False, False)
     root.title("Ajout produit")
     root.config(bg=style_admin.main_color)
     frame_add_product = tkinter.Frame(root,  bg=style_admin.main_color)
     frame_add_product.pack(expand="yes")
     
-    label_name_product = tkinter.Label(frame_add_product, text="Nom du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
+    label_name_product = tkinter.Label(frame_add_product, text="Nom du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white")
     label_name_product.grid(row=0, column=0, sticky="w")
     enter_name_product = tkinter.Entry(frame_add_product)
     enter_name_product.grid(row=1, column=0, sticky="we", pady=5)
     
-    label_quantity_product = tkinter.Label(frame_add_product, text="Quantité du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
-    label_quantity_product.grid(row=2, column=0, sticky="w")
-    enter_quantity_product = tkinter.Entry(frame_add_product)
-    enter_quantity_product.grid(row=3, column=0, sticky="we", pady=5)
+    label_description_product = tkinter.Label(frame_add_product, text="Description du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white")
+    label_description_product.grid(row=2, column=0, sticky="w")
+    enter_description_product = tkinter.Text(frame_add_product, height=5, width=20)
+    enter_description_product.grid(row=3, column=0, sticky="we", pady=5)
     
-    label_price_product = tkinter.Label(frame_add_product, text="Prix", bg=style_admin.main_color, font=("Roboto", 18), fg="white", justify="left")
-    label_price_product.grid(row=4, column=0, sticky="w")
+    label_quantity_product = tkinter.Label(frame_add_product, text="Quantité du produit", bg=style_admin.main_color, font=("Roboto", 18), fg="white")
+    label_quantity_product.grid(row=4, column=0, sticky="w")
+    enter_quantity_product = tkinter.Entry(frame_add_product)
+    enter_quantity_product.grid(row=5, column=0, sticky="we", pady=5)
+    
+    label_price_product = tkinter.Label(frame_add_product, text="Prix", bg=style_admin.main_color, font=("Roboto", 18), fg="white")
+    label_price_product.grid(row=6, column=0, sticky="w")
     enter_price_product = tkinter.Entry(frame_add_product)
-    enter_price_product.grid(row=5, column=0, sticky="we", pady=5)
+    enter_price_product.grid(row=7, column=0, sticky="we", pady=5)
     
     label_error_add_product = tkinter.Label(frame_add_product, text="Un erreur est survenur lors de l'ajout du produit", bg=style_admin.main_color, fg=style_admin.main_color, font=("Roboto", 12, "bold"))
-    label_error_add_product.grid(row=6, column=0, pady=5)
+    label_error_add_product.grid(row=8, column=0, pady=5)
 
     bnt_add_product = tkinter.Button(frame_add_product, text="Ajouter le produit", command=add_product)
-    bnt_add_product.grid(row=7, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
+    bnt_add_product.grid(row=9, column=0, sticky="we", ipadx=3, ipady=2, pady=5)
 
 
 def search_product(event):
