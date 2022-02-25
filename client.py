@@ -160,6 +160,8 @@ def list_product_favoris():
     conn.commit()
     conn.close()
 
+    del_widget_frame_product_favoris()
+
     if len(list_product):
         r = 2
         i = 0
@@ -188,10 +190,7 @@ def list_product_favoris():
             else:
                 i += 1
     else:
-        i = 0
-        for widget in frame_product_favoris.winfo_children():
-            if i > 0: widget.destroy()
-            i += 1
+        del_widget_frame_product_favoris()
     
 
 def list_product():
@@ -200,6 +199,8 @@ def list_product():
     list_product = cursor.execute("SELECT * FROM list_products").fetchall()
     conn.commit()
     conn.close()
+
+    del_widget_frame_product()
 
     if len(list_product):
         i = 0
@@ -225,10 +226,7 @@ def list_product():
                 r += 1 
             i += 1
     else:
-        i = 0
-        for widget in frame_product.winfo_children():
-            if i > 0: widget.destroy()
-            i += 1 
+        del_widget_frame_product()
         
     
 def add_product_list_buy(name_product):
@@ -375,6 +373,18 @@ def back_menu_one():
     frame_product_favoris.grid(row=2, column=0, sticky="we")
     frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
     frame_price.grid(row=2, column=0, padx=900, pady=160)    
+    
+    
+def del_widget_frame_product():
+    list_all_widget_frame_product = frame_product.winfo_children()
+    for widget in list_all_widget_frame_product[1:]:
+        widget.destroy()
+  
+def del_widget_frame_product_favoris():
+    list_all_widget_frame_product_favoris = frame_product_favoris.winfo_children()
+    for widget in list_all_widget_frame_product[1:]:
+        widget.destroy()
+  
     
 
 # event
