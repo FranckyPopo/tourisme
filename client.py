@@ -162,14 +162,13 @@ def list_product_favoris():
 
     r = 2
     i = 0
-    
-    for widget in frame_product_favoris.winfo_children():
-        if i != 0:
-            widget.destroy()
+    # for widget in frame_product_favoris.winfo_children():
+    #     if i > 0:
+    #         widget.destroy()
     
     for item in list_product:
         frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
-        frame.grid(row=r, column=i % 2, padx=20, rowspan=3)
+        frame.grid(row=r, column=i % 2, padx=20, sticky="we")
         
         product = random.choice(list_product)
         name_product = product[0]
