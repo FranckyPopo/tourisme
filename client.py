@@ -183,12 +183,13 @@ def list_product_favoris():
             bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
             bnt_cash.grid(row=1, column=1, padx=10, sticky="n", columnspan=2)     
                     
+            if len(list_product) == 1 or i == 1:
+                break
+            
             if i % 2 != 0:
                 r += 1
-            if i == 1:
-                break
-            else:
-                i += 1
+            i += 1
+                
     else:
         del_widget_frame_product_favoris()
     
@@ -382,7 +383,7 @@ def del_widget_frame_product():
   
 def del_widget_frame_product_favoris():
     list_all_widget_frame_product_favoris = frame_product_favoris.winfo_children()
-    for widget in list_all_widget_frame_product[1:]:
+    for widget in list_all_widget_frame_product_favoris[1:]:
         widget.destroy()
   
     
