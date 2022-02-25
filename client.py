@@ -165,25 +165,34 @@ def list_product_favoris():
 
     if len(list_product):
         r = 2
+        
         i = 0
         for item in list_product:
+            name_product = item[0]
+            price_product = item[2]
+            description_product = item[3]
+            
             frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
-            frame.grid(row=r, column=i % 2, padx=20, sticky="we")
+            frame.grid(row=r, column=i % 2, pady=20, padx=5, sticky="we") 
             
-            product = random.choice(list_product)
-            name_product = product[0]
-            price_product = product[2]
+            frame_description = tkinter.Frame(frame, bg="#F7F7F7", bd=1, relief="solid")
+            frame_description.pack(side="top", fill="x")
             
-            label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            frame_buy = tkinter.Frame(frame, bg="#F7F7F7", bd=1, relief="solid")
+            frame_buy.pack(side="bottom", fill="x")
+
+            label_name_product = tkinter.Label(frame_description, text=name_product, font=("Roboto", 18, "bold", "underline"), bg="#F7F7F7")
             label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+            
+            label_description = tkinter.Label(frame_description, text=description_product, bg="#F7F7F7", font=("Arial", 12), wraplength=250, justify="left")
+            label_description.grid(row=1, column=0, sticky="w")
 
             price = f"Prix: {price_product} FCFA"
-            label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
+            label_price = tkinter.Label(frame_buy, text=price, font=("Arial", 14), bg="#F7F7F7")
             label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
-
-            bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
-            bnt_cash.grid(row=1, column=1, padx=10, sticky="n", columnspan=2)     
-                    
+            
+            bnt_cash = tkinter.Button(frame_buy, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
+            bnt_cash.grid(row=1, column=1, padx=10, sticky="n")
             if len(list_product) == 1 or i == 1:
                 break
             
@@ -208,20 +217,24 @@ def list_product():
         i = 0
         r = 2
         for item in list_product:
+            name_product = item[0]
+            price_product = item[2]
+            description_product = item[3]
+            
             frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
             frame.grid(row=r, column=i % 2, pady=20, padx=5, sticky="we") 
             
-            frame_description = tkinter.Frame(fram, bg="#F7F7F7", bd=1)
+            frame_description = tkinter.Frame(frame, bg="#F7F7F7", bd=1, relief="solid")
             frame_description.pack(side="top", fill="x")
             
-            frame_buy = tkinter.Frame(fram, bg="#F7F7F7", bd=1)
+            frame_buy = tkinter.Frame(frame, bg="#F7F7F7", bd=1, relief="solid")
             frame_buy.pack(side="bottom", fill="x")
 
-            name_product = item[0]
-            price_product = item[2]
-            
-            label_name_product = tkinter.Label(frame_buy, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            label_name_product = tkinter.Label(frame_description, text=name_product, font=("Roboto", 18, "bold", "underline"), bg="#F7F7F7")
             label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+            
+            label_description = tkinter.Label(frame_description, text=description_product, bg="#F7F7F7", font=("Arial", 12), wraplength=250, justify="left")
+            label_description.grid(row=1, column=0, sticky="w")
 
             price = f"Prix: {price_product} FCFA"
             label_price = tkinter.Label(frame_buy, text=price, font=("Arial", 14), bg="#F7F7F7")
