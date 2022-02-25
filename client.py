@@ -160,32 +160,38 @@ def list_product_favoris():
     conn.commit()
     conn.close()
 
-    r = 2
-    i = 0
-    for item in list_product:
-        frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
-        frame.grid(row=r, column=i % 2, padx=20,)
-        
-        product = random.choice(list_product)
-        name_product = product[0]
-        price_product = product[2]
-        
-        label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
-        label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+    del_widget_frame_product_favoris()
 
-        price = f"Prix: {price_product} FCFA"
-        label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
-        label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+    if len(list_product):
+        r = 2
+        i = 0
+        for item in list_product:
+            frame = tkinter.Frame(frame_product_favoris, bg="#F7F7F7", bd=1, relief="solid")
+            frame.grid(row=r, column=i % 2, padx=20, sticky="we")
+            
+            product = random.choice(list_product)
+            name_product = product[0]
+            price_product = product[2]
+            
+            label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
 
-        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
-        bnt_cash.grid(row=1, column=1, padx=10, sticky="n", columnspan=2)        
-                
-        if i % 2 != 0:
-            r += 1
-        if i == 1:
-            break
-        else:
+            price = f"Prix: {price_product} FCFA"
+            label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
+            label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+
+            bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7", command=partial(add_product_list_buy, name_product))
+            bnt_cash.grid(row=1, column=1, padx=10, sticky="n", columnspan=2)     
+                    
+            if len(list_product) == 1 or i == 1:
+                break
+            
+            if i % 2 != 0:
+                r += 1
             i += 1
+                
+    else:
+        del_widget_frame_product_favoris()
     
 
 def list_product():
@@ -194,31 +200,36 @@ def list_product():
     list_product = cursor.execute("SELECT * FROM list_products").fetchall()
     conn.commit()
     conn.close()
+
+    del_widget_frame_product()
+
+    if len(list_product):
+        i = 0
+        r = 2
+        for item in list_product:
+            frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
+            frame.grid(row=r, column=i % 2, pady=20, padx=5, sticky="we") 
+
+            name_product = item[0]
+            price_product = item[2]
+            
+            label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
+
+            price = f"Prix: {price_product} FCFA"
+            label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
+            label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
+            
+            bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
+            bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
+            
+            if i % 2 != 0:
+                r += 1 
+            i += 1
+    else:
+        del_widget_frame_product()
+        
     
-    i = 0
-    r = 2
-    for item in list_product:
-        frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
-        frame.grid(row=r, column=i % 2, pady=20, padx=5) 
-
-        name_product = item[0]
-        price_product = item[2]
-        
-        label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
-        label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
-
-        price = f"Prix: {price_product} FCFA"
-        label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
-        label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
-        
-        bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
-        bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
-        
-        if i % 2 != 0:
-            r += 1 
-        i += 1
-        
-        
 def add_product_list_buy(name_product):
     quantity = 1
     d = {"name_product": name_product, "quantity_product": quantity}
@@ -363,6 +374,18 @@ def back_menu_one():
     frame_product_favoris.grid(row=2, column=0, sticky="we")
     frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
     frame_price.grid(row=2, column=0, padx=900, pady=160)    
+    
+    
+def del_widget_frame_product():
+    list_all_widget_frame_product = frame_product.winfo_children()
+    for widget in list_all_widget_frame_product[1:]:
+        widget.destroy()
+  
+def del_widget_frame_product_favoris():
+    list_all_widget_frame_product_favoris = frame_product_favoris.winfo_children()
+    for widget in list_all_widget_frame_product_favoris[1:]:
+        widget.destroy()
+  
     
 
 # event

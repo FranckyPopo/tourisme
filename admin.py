@@ -249,7 +249,7 @@ def search_product(event):
     
     
 
-window = tkinter
+window = tkinter.Tk()
 window.geometry("1147x930")
 #window.resizable(False, False)
 window.config(bg=style_admin.main_color)
