@@ -761,7 +761,7 @@ label_connection.grid(row=1, column=0, sticky="we")
 
 # frame produtuit favoris
 frame_product_favoris = tkinter.Frame(frame_main, bg="#F7F7F7")
-frame_product_favoris.grid(row=2, column=0, sticky="we")
+frame_product_favoris.grid(row=2, column=0, sticky="we", padx=25)
 
 label_top = tkinter.Label(frame_product_favoris, text="Top des ventes", bg="#F7F7F7", font=("Roboto", 14))
 label_top.grid(row=0, column=0, pady=30, sticky="we", padx=20)
