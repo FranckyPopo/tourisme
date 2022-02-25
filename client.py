@@ -155,7 +155,8 @@ def list_product_favoris():
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
                     name_product text, 
                     quantity_product int,
-                    price_product int)""")
+                    price_product int,
+                    description_product)""")
     list_product = cursor.execute("SELECT * FROM list_products").fetchall()
     conn.commit()
     conn.close()
@@ -209,18 +210,24 @@ def list_product():
         for item in list_product:
             frame = tkinter.Frame(frame_product, bg="#F7F7F7", bd=1, relief="solid")
             frame.grid(row=r, column=i % 2, pady=20, padx=5, sticky="we") 
+            
+            frame_description = tkinter.Frame(fram, bg="#F7F7F7", bd=1)
+            frame_description.pack(side="top", fill="x")
+            
+            frame_buy = tkinter.Frame(fram, bg="#F7F7F7", bd=1)
+            frame_buy.pack(side="bottom", fill="x")
 
             name_product = item[0]
             price_product = item[2]
             
-            label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
+            label_name_product = tkinter.Label(frame_buy, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
             label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
 
             price = f"Prix: {price_product} FCFA"
-            label_price = tkinter.Label(frame, text=price, font=("Arial", 14), bg="#F7F7F7")
+            label_price = tkinter.Label(frame_buy, text=price, font=("Arial", 14), bg="#F7F7F7")
             label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
             
-            bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
+            bnt_cash = tkinter.Button(frame_buy, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
             bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
             
             if i % 2 != 0:
@@ -381,13 +388,13 @@ def del_widget_frame_product():
     for widget in list_all_widget_frame_product[1:]:
         widget.destroy()
   
+  
 def del_widget_frame_product_favoris():
     list_all_widget_frame_product_favoris = frame_product_favoris.winfo_children()
     for widget in list_all_widget_frame_product_favoris[1:]:
         widget.destroy()
   
     
-
 # event
 def del_error(event):
     label_error_connection.config(fg="#F7F7F7")    
@@ -462,7 +469,6 @@ def search_product(event):
             bnt_cash = tkinter.Button(frame, image=img_add_product, highlightbackground="#F7F7F7",  command=partial(add_product_list_buy, name_product))
             bnt_cash.grid(row=1, column=1, padx=10, sticky="n")   
             
-            
             if i % 2 != 0:
                 r += 1 
             i += 1
@@ -498,7 +504,7 @@ def modify_count(event):
             cursor.execute("UPDATE list_client SET user_name=:name_user, last_name=:last_name, first_name=:first_name WHERE email=:email", d)
             conn.commit()
             conn.close()
-            messagebox.showinfo("Mise a jour profile", "Le profile vient d'être mise a jour")
+            messagebox.showinfo("Mise a jour du profile", "Le profile vient d'être mise a jour. Les informations serons appliqué a la prochaine connection")
         else:
             error.config(fg="red")
         
@@ -577,7 +583,7 @@ def disconnection(event):
 
 window = tkinter.Tk()   
 window.geometry("1147x930")
-window.resizable(False, False)
+#window.resizable(False, False)
 window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
