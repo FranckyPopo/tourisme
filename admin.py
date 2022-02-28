@@ -109,10 +109,10 @@ def admin_space():
     conn = sqlite3.connect(path_list_products)
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS list_products (
-                    name_product text,
-                    quantity_product int,
-                    price_product int,
-                    description text)""")
+        name_product text,
+        quantity_product int,
+        price_product int,
+        description text)""")
     data = cursor.execute("SELECT * FROM list_products")
     list_product = data.fetchall()
     conn.commit()
@@ -136,7 +136,7 @@ def admin_space():
         bnt_modify = tkinter.Button(frame_list_product, image=img_modify, highlightbackground="white", command=partial(window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
-        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat", image=img_delete, bd=10, bg="white", highlightbackground="white")
+        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat", image=img_delete, bg="white", highlightbackground="white")
         
         bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
         bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
@@ -249,10 +249,10 @@ def search_product(event):
         label_quantity = tkinter.Label(frame_list_product, text=quantity_product, font=("Roboto", 18), bg="white")
         label_quantity.grid(row=i, column=1, sticky="w", padx=120, pady=5) 
 
-        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", command=partial(window_modify_product, name_product), relief="flat")
+        bnt_modify = tkinter.Button(frame_list_product, text="Modifier", highlightbackground="white", image=img_modify, command=partial (window_modify_product, name_product), relief="flat")
         bnt_modify.grid(row=i, column=2, ipadx=3, ipady=2, pady=5)  
         
-        bnt_delete = tkinter.Button(frame_list_product, text="Supprimer", relief="flat")
+        bnt_delete = tkinter.Button(frame_list_product, image=img_delete, text="Supprimer", relief="flat", bg="white", highlightbackground="white")
         
         bnt_delete["command"] = partial(delete_product, name_product, label_product, label_quantity, bnt_modify, bnt_delete)
         bnt_delete.grid(row=i, column=3, ipadx=3, ipady=2, pady=5)    
