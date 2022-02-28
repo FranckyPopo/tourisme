@@ -24,6 +24,8 @@ i = 2
 def display_menu():
     frame_container_connection.place_forget()
     frame_container_recording.place_forget()
+    frame_count.grid_forget()
+
     frame_price.grid(row=2, column=0, padx=900, pady=160)
     frame_main.place(x=0, y=0)
 
@@ -127,7 +129,6 @@ def check_connection():
                 enter_user_name.delete(0, "end")
                 enter_password_connection.delete(0, "end")
                 display_menu()
-                frame_count.grid_forget()
                 frame_product_favoris.grid(row=2, column=0, sticky="we")
                 
                 break
@@ -523,7 +524,6 @@ def modify_count(event):
         
     
     frame_product_favoris.grid_forget()
-    frame_product.grid_forget()
     frame_price.grid_forget()
     
     # ID du client
