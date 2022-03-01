@@ -1,3 +1,4 @@
+# coding: utf-8
 import tkinter
 from tkinter import ttk, messagebox
 import os
@@ -25,8 +26,8 @@ def display_menu():
     frame_container_connection.place_forget()
     frame_container_recording.place_forget()
     frame_count.grid_forget()
-
     frame_price.grid(row=2, column=0, padx=900, pady=160)
+    frame_product.grid(row=3, column=0, pady=30, padx=25, sticky="w")
     frame_main.place(x=0, y=0)
 
 
@@ -125,12 +126,11 @@ def check_connection():
             user_name_client = client[2]
             password_client = client[6]
             if user_name == user_name_client and password == password_client:
-                label_name.config(text=f"{client[2]}")
+                label_name.config(text=client[2])
                 enter_user_name.delete(0, "end")
                 enter_password_connection.delete(0, "end")
                 display_menu()
                 frame_product_favoris.grid(row=2, column=0, sticky="we")
-                
                 break
         else:
             label_error_connection.config(fg="red")
@@ -188,7 +188,7 @@ def list_product_favoris():
             label_description = tkinter.Label(frame_description, text=description_product, bg="#F7F7F7", font=("Arial", 12), wraplength=250, justify="left")
             label_description.grid(row=1, column=0, sticky="w")
 
-            price = f"Prix: {price_product} FCFA"
+            price = "Prix: {} FCFA".format(price_product)
             label_price = tkinter.Label(frame_buy, text=price, font=("Arial", 14), bg="#F7F7F7")
             label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
             
@@ -237,7 +237,7 @@ def list_product():
             label_description = tkinter.Label(frame_description, text=description_product, bg="#F7F7F7", font=("Arial", 12), wraplength=250, justify="left")
             label_description.grid(row=1, column=0, sticky="w")
 
-            price = f"Prix: {price_product} FCFA"
+            price = "Prix: {} FCFA".format(price_product)
             label_price = tkinter.Label(frame_buy, text=price, font=("Arial", 14), bg="#F7F7F7")
             label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
             
@@ -311,7 +311,7 @@ def refresh_p():
         bnt_valided.grid(row=i, column=0, pady=5, ipadx=3, ipady=2, columnspan=2)
 
 
-def id_code() -> str:
+def id_code():
     alphabet = list(ascii_lowercase)
     code = []
     for i in range(0, 5):
@@ -476,7 +476,7 @@ def search_product(event):
             label_name_product = tkinter.Label(frame, text=name_product, font=("Roboto", 18, "bold"), bg="#F7F7F7")
             label_name_product.grid(row=0, column=0, sticky="w", ipadx=10, ipady=5, pady=5)
 
-            price = f"Prix: {price_product} FCFA"
+            price = "Prix: {} FCFA".format(price_product)
             label_price = tkinter.Label(frame, text=price, font=("Roboto", 14, "bold"), bg="#F7F7F7")
             label_price.grid(row=1, column=0, sticky="w", ipadx=10, ipady=5)
             
@@ -524,6 +524,7 @@ def modify_count(event):
         
     
     frame_product_favoris.grid_forget()
+    frame_product.grid_forget()
     frame_price.grid_forget()
     
     # ID du client
@@ -601,16 +602,20 @@ window.title("POPO FOOD")
 window.config(bg=style_admin.main_color)
 
 # Img
-photo_add = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((50, 50))
+lien_img_1 = folder_img + '/' + 'ajouter-au-panier.png'
+photo_add = Image.open(lien_img_1).resize((50, 50))
 img_add_product = ImageTk.PhotoImage(photo_add)
 
-photo_add_two = Image.open(f"{folder_img + '/' + 'ajouter-au-panier.png'}").resize((25, 25))
+lien_img_2 = folder_img + '/' + 'ajouter-au-panier.png'
+photo_add_two = Image.open(lien_img_2).resize((25, 25))
 img_more = ImageTk.PhotoImage(photo_add_two)
 
-photo_del = Image.open(f"{folder_img + '/' + 'icons_moins.png'}").resize((25, 25))
+lien_img_3 = folder_img + '/' + 'ajouter-au-panier.png'
+photo_del = Image.open(lien_img_3).resize((25, 25))
 img_less = ImageTk.PhotoImage(photo_del)
 
-photo_fleche = Image.open(f"{folder_img + '/' + 'icone_fleche.png'}").resize((25, 25))
+lien_img_4 = folder_img + '/' + 'icone_fleche.png'
+photo_fleche = Image.open(lien_img_4).resize((25, 25))
 img_fleche = ImageTk.PhotoImage(photo_fleche)
 
 # frame connection ou inscription
@@ -751,9 +756,6 @@ frame_pupop = tkinter.Frame(window, bg="white")
 label_count = tkinter.Label(frame_pupop, text="Mon compte",  bg="white")
 label_count.bind("<Button-1>", modify_count)
 label_count.grid(row=0, column=0, sticky="we")
-
-# label_count = tkinter.Label(frame_pupop, text="Voir commande",  bg="white")
-# label_count.grid(row=1, column=0, sticky="we")
 
 label_connection = tkinter.Label(frame_pupop, text="Déconnection",  bg="white", fg="red")
 label_connection.bind("<Button-1>", disconnection)
